@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>使用python3和高性能全文检索引擎Redisearch进行交互</title>
+    <url>/2017/10/07/%E4%BD%BF%E7%94%A8python3%E5%92%8C%E9%AB%98%E6%80%A7%E8%83%BD%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8ERedisearch%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92/</url>
+    <content><![CDATA[<p> 上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:<a href="https://github.com/RediSearch/redisearch-py" target="_blank" rel="noopener">https://github.com/RediSearch/redisearch-py</a></p><a id="more"></a>
+<p>首先，安装</p>
+<p>pip3 install redisearch<br>    基本操作:</p>
+<p>from redisearch import Client, TextField</p>
+<h1 id="Creating-a-client-with-a-given-index-name"><a href="#Creating-a-client-with-a-given-index-name" class="headerlink" title="Creating a client with a given index name"></a>Creating a client with a given index name</h1><p>client = Client(‘myIndex’,host=’localhost’,port=’6666’)</p>
+<h1 id="Creating-the-index-definition-and-schema"><a href="#Creating-the-index-definition-and-schema" class="headerlink" title="Creating the index definition and schema"></a>Creating the index definition and schema</h1><p>client.create_index((TextField(‘title’), TextField(‘body’)))</p>
+<h1 id="Indexing-a-document"><a href="#Indexing-a-document" class="headerlink" title="Indexing a document"></a>Indexing a document</h1><p>client.add_document(‘doc2’, title = ‘你好’, body = ‘我在北京学习人工智能’,language=’chinese’)</p>
+<h1 id="Simple-search"><a href="#Simple-search" class="headerlink" title="Simple search"></a>Simple search</h1><p>res = client.search(“人工智能”)</p>
+<p>print(res.docs[0].title)<br>    可以看到，基本上和命令行中的操作方式没有太大区别，只是在search时不需要指定语言了，程序可以自主判断。</p>
+<pre><code>其实它的官方文档很简单，只是介绍了基本用法，但是你如果阅读了它的源码，发现一些常用操作它也进行了封装，比如</code></pre><p>#删除索引<br>client.drop_index()</p>
+<p>#获取当前索引的基本信息<br>client.info()</p>
+<p>#删除文档<br>client.delete_document(‘doc2’)</p>
+<pre><code>还是非常简单的，基本上，我们可以抛弃ES了，因为研发人员都是喜新厌旧的。</code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>使用Redisearch实现的全文检索功能服务</title>
+    <url>/2017/10/06/%E4%BD%BF%E7%94%A8Redisearch%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%8A%9F%E8%83%BD%E6%9C%8D%E5%8A%A1/</url>
+    <content><![CDATA[<p>“检索”是很多产品中无法绕开的一个功能模块，当数据量小的时候可以使用模糊查询等操作凑合一下，但是当面临海量数据和高并发的时候，业界常用 elasticsearch 和 lucene 等方案，但是elasticsearch对运行时内存有着最低限额，其运行时大小推荐 2G 以上的内存空间，并且需要额外的磁盘空间做持久化存储。</p><a id="more"></a>
+<pre><code>其实mongoDB 内置的正则匹配搜索文本以及自带的 text 索引和 search 关键字也是一套靠谱的解决方案，但是这一次我们带来一种更加高效经济的文本检索方案：Redisearch
+
+下图是elasticsearch和redisearch的性能对比
+
+
+
+Redis Modules 是 redis 4.0 引入的一种扩展机制，用户可以通过实现 redis module 提供的 C api 接口为 redis 服务添加定制化功能。 redisLab 也希望籍此来规范 redis 社区的 ecosystem 实现。
+
+redis module 本身的版本独立于redis，并且以编译成动态加载库 .so 文件的方式 release， 不同版本的 redis 可以 load 同一版本 module.so 文件。
+
+redis 提供了两种加载方式。可以通过 在 conf 文件中 加入 loadmodule /path/to/mymodule.so ，也可以在 redis-cli中使用命令 MODULE LOAD /path/to/panda.so 动态加载，MODULE UNLOAD 卸载。
+
+
+特性
+
+基于文档的全文索引。
+高性能增量索引。
+支持文档评分，文档字段(field) 权重机制。
+支持布尔复杂查询。
+支持自动补全。
+基于 snowball 的词干分析，多语言支持。使用 friso 支持中文分词。
+utf-8 字符集支持。
+redis 数据持久化支持。
+自定义评分机制。
+
+
+
+其原理是在 redis 的 hashmap 基础上就可以很容易实现倒排索引的结构。redisearch 倒排索引除了实现了基础功能外，还引入了内存管理等优化功能。如果有兴趣可以阅读源码中的 src/inverted_index.c 部分
+
+
+
+首先，安装Rediseach,记住一点你本地的redis服务版本必须在4.0以上，网上一大堆编译安装的攻略，繁琐又浪费时间，所以又到了Docker登场时间了，hub上有编译好的免费镜像供我们下载</code></pre><p>docker pull redislabs/redisearch<br>    下载后，直接在后台启动服务</p>
+<p>docker run -d -p 6666:6379 redislabs/redisearch:latest</p>
+<pre><code>此时已经有一个docker容器在后台启动了，redis服务映射到了宿主的6666端口，我们来连接一下</code></pre><p>redis-cli -h localhost -p 6666</p>
+<pre><code>检查 modules 是否成功加载</code></pre><p>localhost:6666&gt; MODULE list</p>
+<p>1) 1) “name”<br>   2) “ft”<br>   3) “ver”<br>   4) (integer) 10405<br>    如果返回数组中存在 “ft” ， 则表明 redisearch 已经成功加载。</p>
+<pre><code>Redisearch 的索引概念 与elasticsearch 的 index 类似，表示某一类文档资源单元。
+
+这里我们定义了一个 SMARTX_VM 索引，其中存储的文档 包含 了 title 和 desc 两个 类型为 TEXT 的field。</code></pre><p>FT.CREATE SMARTX_VM SCHEMA title TEXT WEIGHT 5.0 desc TEXT<br>    然后向刚刚创建的这条索引加一个文档</p>
+<p>FT.ADD SMARTX_VM vm-2019082911110001 1.0 LANGUAGE “chinese” FIELDS title “人工智能” desc “我在北京昌平学习人工智能”<br>    LANGUAGE “chinese” 参数 表示 使用 中文分词器 处理文本。默认为英文</p>
+<pre><code>此时我们进行文档检索</code></pre><p>FT.SEARCH SMARTX_VM “人工智能” LANGUAGE “chinese”<br>    注意检索的时候也要指定语言，这里我们用中文分词，默认的英文分词是无法检索中文的</p>
+<pre><code>可以看到已经返回了我们想要的结果。
+
+
+Redisearch 是一个高效，功能完备的内存存储的高性能全文检索组件， 十分适合应用在数据量适中， 内存和存储空间有限的环境。借助数据同步手段，我们可以很方便的将redisearch 结合到现有的数据存储中， 进而向产品提供 全文检索， 自动补全等服务优化功能。</code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>数据库索引</title>
+    <url>/2017/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<p>引言<br>说白了,数据库的索引问题就是查找问题</p><p>数据库索引,是数据库管理系统中一个排序的数据结构,以协助快速查询,更新数据库中表的数据.索引的实现通常使用B树和变种的B+树(mysql常用的索引就是B+树)</p><a id="more"></a>
+
+<p>除了数据之外,数据库系统还维护为满足特定查找算法的数据结构,这些数据结构以某种方式引用数据.这种数据结构就是索引</p>
+<p>创建索引的好处<br>①通过创建索引,可以在查询的过程中,提高系统的性能</p>
+<p>②通过创建唯一性索引,可以保证数据库表中每一行数据的唯一性</p>
+<p>③在使用分组和排序子句进行数据检索时,可以减少查询中分组和排序的时间</p>
+<p>创建索引的坏处<br>①创建索引和维护索引要耗费时间,而且时间随着数据量的增加而增大</p>
+<p>②索引需要占用物理空间,如果要建立聚簇索引,所需要的空间会更大</p>
+<p>③在对表中的数据进行增加删除和修改时需要耗费较多的时间,因为索引也要动态地维护</p>
+<p>应该在哪些列上创建索引呢<br>①经常需要搜索的列上</p>
+<p>②作为主键的列上</p>
+<p>③经常用在连接的列上,这些列主要是一些外键,可以加快连接的速度</p>
+<p>④经常需要根据范围进行搜索的列上</p>
+<p>⑤经常需要排序的列上</p>
+<p>⑥经常使用在where子句上面的列上</p>
+<p>不应该在哪些列上创建索引<br>①查询中很少用到的列</p>
+<p>②对于那些具有很少数据值的列.比如人事表的性别列,bit数据类型的列</p>
+<p>③对于那些定义为text,image的列.因为这些列的数据量相当大</p>
+<p>④当对修改性能的要求远远大于搜索性能时.因为当增加索引时,会提高搜索性能,但是会降低修改性能</p>
+<p>索引的分类和使用<br>按物理存储角度分：</p>
+<p>聚集索引</p>
+<p>表记录的排列顺序和索引的排列顺序一致,所以查询效率快,只要找到第一个索引值记录,其余连续性的记录在物理上一样连续存放.聚集索引的缺点就是修改慢,因为为了使表记录和索引的排列顺序一致,在插入记录的时候,会对数据页重新排序</p>
+<p>非聚集索引</p>
+<p>表记录和索引的排列顺序不一定一致,两种索引都采用B+树的结构,非聚集索引的叶子层并不和实际数据页相重叠,而采用叶子层包含一个指向表记录的指针.非聚集索引层次多,不会造成数据重排</p>
+<p>按逻辑角度分</p>
+<p>2）普通索引，最基本的索引，它没有任何的限制</p>
+<p>4）复合索引（又叫做多列索引，联合索引）：多个字段上建立的索引，提高复合条件查询的速度</p>
+<p>创建联合索引：create index idx_name_age on student(name,age);</p>
+<p>查看索引：show index from student;</p>
+<p>数据库索引在什么情况下失效<br>（1）条件中用or（这就是为什么少用or的原因）</p>
+<p>（2）</p>
+<p>对于多列（复合、联合）索引，不是使用的第一部分，则不会使用索引。(最左匹配原则或者叫做最左前缀原则）</p>
+<p>比如：Index_SoftWareDetail索引包含（a，b，c） 三列，但是查询条件里面，没有a，b 列，只有c 列，那么 Index_SoftWareDetail索引也不起作用。</p>
+<p>例如：bc   c   acb bac 都是不行的</p>
+<p>（3）like的模糊查询以%开头，索引失效</p>
+<p>（4）如果列类型是字符串，那一定要在条件中将数据使用引号引用起来，否则不会使用索引</p>
+<p>（5）如果MySQL预计使用全表扫描要比使用索引快，则不使用索引</p>
+<p>（6）判断索引列是否不等于某个值时。‘!=’操作符。比如：select * from SoftWareDetailInfo where SoftUseLine != 0</p>
+<p>（7）</p>
+<p>对索引列进行运算。这里运算包括+-*/等运算。也包括使用函数。比如：</p>
+<p>select * from SoftWareDetailInfo where SoftUseLine +0= 0</p>
+<p>此时索引不起作用。</p>
+<p>select * from SoftWareDetailInfo where count(SoftUseLine) = 0</p>
+<p>此时索引也不起作用。</p>
+<p>也就是说如果不是直接判断索引字段列，而是判断运算或其它函数处理后的索引列索引均不起作用。</p>
+<p>（8）索引字段进行判空查询时。也就是对索引字段判断是否为NULL时。语句为is null 或is not null。</p>
+<p>　　比如：select * from SoftWareDetailInfo where CreateTime is null 此时就不检索time字段上的索引表了。也就是索引在这条语句执行时失效了。</p>
+<p>　　接着再执行</p>
+<p>select * from SoftWareDetailInfo where CreateTime = ‘2015-04-11 00:00:00’ 此时就会检索索引表了。索引又起作用了。</p>
+<p>（9）范围列可以用到索引（联合索引必须是最左前缀），但是范围列后面的列无法用到索引</p>
+<p>索引的优化<br>①尽量不要使用左模糊和全模糊，如果需要可以使用搜索引擎来解决</p>
+<p>②union,in和or都可以命中索引，建议使用in</p>
+<p>③负向条件查询不能使用索引，可以优化为in查询</p>
+<p>负向条件查询有：!=  &lt;&gt;  not in  not like等等</p>
+<p>例如：select * from user where status!=1 and status!=2</p>
+<p>优化为：select * from user where status in (0,3,4);</p>
+<p>④合理使用联合索引的最左前缀原则</p>
+<p>如果在(a,b,c)三个字段上建立联合索引，那么它能够加快 a | (a,b) | (a,b,c) 三组查询速度。</p>
+<p>比如说把(username,password)建立了联合索引，因为业务上几乎没有password的单条件查询，而有很多username的单条件查询需求，所以应该建立(username,password)的联合索引，而不要建立(password,username)的联合索引</p>
+<p>注意：（1）建立联合索引的时候，要把查询频率较高的列放在最左边</p>
+<p>（2）如果建立了(a,b)索引，就不必再独立建立a索引。同理如果建立了(a,b,c)联合索引，就不必再独立建立a,(a,b)索引</p>
+<p>（3）存在非等号和等号混合判断条件时，在建索引时，请把等号条件的列前置。如     where a&gt;? and b=?，那么即使 a 的区分度更高，也必须把 b 放在索引的最前列。</p>
+<p>（4）最左前缀原则，并不是要求where后的顺序和联合索引的一致。下面的 SQL 语句也可以命中 (login_name, passwd) 这个联合索引。</p>
+<p>selectuid, login_time from user where passwd=? andlogin_name=?<br>但还是建议 where 后的顺序和联合索引一致，养成好习惯。</p>
+<p>⑤把计算放到业务层而不是数据库层。（因为对索引列进行运算，不能命中索引）</p>
+<p>⑥表数据比较少、更新十分频繁、数据区分度不高的字段上不宜建立索引。</p>
+<p>一般区分度在80%以上的时候就可以建立索引，区分度可以使用 count(distinct(列名))/count(*) 来计算。</p>
+<p>⑦强制类型转换会全表扫描</p>
+<p>例如：如果phone字段是varchar类型，则下面的sql不能命中索引</p>
+<p>select * from user where phone = 18838003017</p>
+<p>可以优化为：select * from user where phone = ‘18838003017’</p>
+<p>⑧利用覆盖索引进行查询操作，避免回表</p>
+<p>select uid,login_time from user where username=? and password=?</p>
+<p>如果建立了(username,password,login_time)的联合索引,由于login_time已经建立在索引中了,被查询的username和password就不用去row上获取数据了,从而加速查询</p>
+<p>⑨在order by和group by中要注意索引的有序性</p>
+<p>如果order by是组合索引的一部分,应该将该字段放在组合索引的最后</p>
+<p>例如:where a=? and b=? order by c -&gt;可以建立联合索引(a,b,c)</p>
+<p>如果索引中有范围查找,则索引的有序性无法利用</p>
+<p>例如:where a&gt;10 order by b -&gt;索引(a,b)无法排序</p>
+<p>⑩建立索引的列,不许为null</p>
+<p>单列索引不存 null 值，复合索引不存全为 null 的值，如果列允许为 null，可能会得到“不符合预期”的结果集，所以，请使用 not null 约束以及默认值。</p>
+<p>sql语句的优化<br>①能用到索引尽量用到索引.对索引的优化实际上就是sql语句的调优</p>
+<p>②任何地方都不要使用 select * from t ，用具体的字段列表代替“*”，不要返回用不到的任何字段。</p>
+<p>③尽量使用where,而不要使用having</p>
+<p>④尽量使用多表查询,不要使用子查询</p>
+<p>⑤where后的and.or左右执行顺序是从右至左</p>
+<p>运算符为and时–尽量把为假的放在右边</p>
+<p>运算符为or时–尽量把为真的放在右边</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口</title>
+    <url>/2017/10/02/Python3.7.2+Django2.0.4%20%E7%BE%8E%E5%A4%9A%E5%95%86%E5%9F%8E%E9%9B%86%E6%88%90%E6%9C%80%E6%96%B0%E7%89%88%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3/</url>
+    <content><![CDATA[<p>  最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍</p><a id="more"></a>
+<p>  在Mac系统下生成新版支付宝（2019年4月）支付接口私钥和公钥</p>
+<p>  在Django中集成支付接口的前置操作就是需要安装pycryptodome</p>
+<p>  pip3 install -i <a href="https://pypi.douban.com/simple" target="_blank" rel="noopener">https://pypi.douban.com/simple</a> pycryptodome</p>
+<p>  然后将之前生成好的私钥和公钥（注意这里的公钥是指支付宝公钥），放入到项目目录中去</p>
+<p>  </p>
+<p>  <br>  <br>  文档地址：<a href="https://docs.open.alipay.com/api" target="_blank" rel="noopener">https://docs.open.alipay.com/api</a></p>
+<p>  然后根据支付宝官网文档写一个支付基类 pay.py</p>
+<p>from datetime import datetime<br>from Crypto.PublicKey import RSA<br>from Crypto.Signature import PKCS1_v1_5<br>from Crypto.Hash import SHA256<br>from urllib.parse import quote_plus<br>from urllib.parse import urlparse, parse_qs<br>from base64 import decodebytes, encodebytes<br>import json</p>
+<p>class AliPay(object):<br>    “””<br>    支付宝支付接口(PC端支付接口)<br>    “””</p>
+<pre><code>def __init__(self, appid, app_notify_url, app_private_key_path,
+             alipay_public_key_path, return_url, debug=False):
+    self.appid = appid
+    self.app_notify_url = app_notify_url
+    self.app_private_key_path = app_private_key_path
+    self.app_private_key = None
+    self.return_url = return_url
+    with open(self.app_private_key_path) as fp:
+        self.app_private_key = RSA.importKey(fp.read())
+    self.alipay_public_key_path = alipay_public_key_path
+    with open(self.alipay_public_key_path) as fp:
+        self.alipay_public_key = RSA.importKey(fp.read())
+
+    if debug is True:
+        self.__gateway = &quot;https://openapi.alipaydev.com/gateway.do&quot;
+    else:
+        self.__gateway = &quot;https://openapi.alipay.com/gateway.do&quot;
+
+def direct_pay(self, subject, out_trade_no, total_amount, return_url=None, **kwargs):
+    biz_content = {
+        &quot;subject&quot;: subject,
+        &quot;out_trade_no&quot;: out_trade_no,
+        &quot;total_amount&quot;: total_amount,
+        &quot;product_code&quot;: &quot;FAST_INSTANT_TRADE_PAY&quot;,
+        # &quot;qr_pay_mode&quot;:4
+    }
+
+    biz_content.update(kwargs)
+    data = self.build_body(&quot;alipay.trade.page.pay&quot;, biz_content, self.return_url)
+    return self.sign_data(data)
+
+def build_body(self, method, biz_content, return_url=None):
+    data = {
+        &quot;app_id&quot;: self.appid,
+        &quot;method&quot;: method,
+        &quot;charset&quot;: &quot;utf-8&quot;,
+        &quot;sign_type&quot;: &quot;RSA2&quot;,
+        &quot;timestamp&quot;: datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;),
+        &quot;version&quot;: &quot;1.0&quot;,
+        &quot;biz_content&quot;: biz_content
+    }
+
+    if return_url is not None:
+        data[&quot;notify_url&quot;] = self.app_notify_url
+        data[&quot;return_url&quot;] = self.return_url
+
+    return data
+
+def sign_data(self, data):
+    data.pop(&quot;sign&quot;, None)
+    # 排序后的字符串
+    unsigned_items = self.ordered_data(data)
+    unsigned_string = &quot;&amp;&quot;.join(&quot;{0}={1}&quot;.format(k, v) for k, v in unsigned_items)
+    sign = self.sign(unsigned_string.encode(&quot;utf-8&quot;))
+    # ordered_items = self.ordered_data(data)
+    quoted_string = &quot;&amp;&quot;.join(&quot;{0}={1}&quot;.format(k, quote_plus(v)) for k, v in unsigned_items)
+
+    # 获得最终的订单信息字符串
+    signed_string = quoted_string + &quot;&amp;sign=&quot; + quote_plus(sign)
+    return signed_string
+
+def ordered_data(self, data):
+    complex_keys = []
+    for key, value in data.items():
+        if isinstance(value, dict):
+            complex_keys.append(key)
+
+    # 将字典类型的数据dump出来
+    for key in complex_keys:
+        data[key] = json.dumps(data[key], separators=(&apos;,&apos;, &apos;:&apos;))
+
+    return sorted([(k, v) for k, v in data.items()])
+
+def sign(self, unsigned_string):
+    # 开始计算签名
+    key = self.app_private_key
+    signer = PKCS1_v1_5.new(key)
+    signature = signer.sign(SHA256.new(unsigned_string))
+    # base64 编码，转换为unicode表示并移除回车
+    sign = encodebytes(signature).decode(&quot;utf8&quot;).replace(&quot;n&quot;, &quot;&quot;)
+    return sign
+
+def _verify(self, raw_content, signature):
+    # 开始计算签名
+    key = self.alipay_public_key
+    signer = PKCS1_v1_5.new(key)
+    digest = SHA256.new()
+    digest.update(raw_content.encode(&quot;utf8&quot;))
+    if signer.verify(digest, decodebytes(signature.encode(&quot;utf8&quot;))):
+        return True
+    return False
+
+def verify(self, data, signature):
+    if &quot;sign_type&quot; in data:
+        sign_type = data.pop(&quot;sign_type&quot;)
+    # 排序后的字符串
+    unsigned_items = self.ordered_data(data)
+    message = &quot;&amp;&quot;.join(u&quot;{}={}&quot;.format(k, v) for k, v in unsigned_items)
+    return self._verify(message, signature)
+
+最后在视图文件中定义方法就可以了</code></pre><p>#导入支付基类<br>from .pay import Alipay</p>
+<p>#初始化阿里支付对象<br>def get_ali_object():<br>    # 沙箱环境地址：<a href="https://openhome.alipay.com/platform/appDaily.htm?tab=info" target="_blank" rel="noopener">https://openhome.alipay.com/platform/appDaily.htm?tab=info</a><br>    app_id = “2016092600603658”  #  APPID （沙箱应用）</p>
+<pre><code># 支付完成后，支付偷偷向这里地址发送一个post请求，识别公网IP,如果是 192.168.20.13局域网IP ,支付宝找不到，def page2() 接收不到这个请求
+notify_url = &quot;http://localhost:8000/md_admin/alipayreturn&quot;
+
+# 支付完成后，跳转的地址。
+return_url = &quot;http://localhost:8000/md_admin/alipayreturn&quot;
+
+merchant_private_key_path = &quot;c:/Users/liuyue/www/md/keys/app_private_2048.txt&quot; # 应用私钥
+alipay_public_key_path = &quot;c:/Users/liuyue/www/md/keys/alipay_public_2048.txt&quot;  # 支付宝公钥
+
+alipay = AliPay(
+    appid=app_id,
+    app_notify_url=notify_url,
+    return_url=return_url,
+    app_private_key_path=merchant_private_key_path,
+    alipay_public_key_path=alipay_public_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥
+    debug=True,  # 默认False,
+)
+return alipay</code></pre><p>def page1(request):</p>
+<pre><code>if request.method == &quot;POST&quot;:
+
+    # 根据当前用户的配置，生成URL，并跳转。
+    money = float(request.POST.get(&apos;money&apos;))
+
+    alipay = get_ali_object()
+
+    # 生成支付的url
+    query_params = alipay.direct_pay(
+        subject=&quot;test&quot;,  # 商品简单描述
+        out_trade_no=&quot;myorder&quot; + str(time.time()),  # 用户购买的商品订单号（每次不一样） 20180301073422891
+        total_amount=money,  # 交易金额(单位: 元 保留俩位小数)
+    )
+
+    pay_url = &quot;https://openapi.alipaydev.com/gateway.do?{0}&quot;.format(query_params)  # 支付宝网关地址（沙箱应用）
+
+    return redirect(pay_url)
+else:
+    return render(request,&apos;md_admin/page1.html&apos;)</code></pre><p>def alipay_return(request):<br>    alipay = get_ali_object()<br>    params = request.GET.dict()<br>    sign = params.pop(‘sign’, None)<br>    status = alipay.verify(params, sign)<br>    print(‘==================开始==================’)<br>    print(‘GET验证’, status)<br>    print(‘==================结束==================’)<br>    return HttpResponse(‘支付成功’)</p>
+<pre><code>搞定收工</code></pre>]]></content>
+  </entry>
+</search>
