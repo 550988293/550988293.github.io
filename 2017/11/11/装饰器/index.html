@@ -51,17 +51,17 @@
   };
 </script>
 
-  <meta name="description" content="装饰器函数装饰器：在函数运行时增加功能且不影响这个函数原有内容">
+  <meta name="description" content="装饰器函数装饰器：在函数运行时增加功能且不影响这个函数原有内容普通装饰器函数语法：@func1def func2():    pass@符号为装饰器函数语法，也常叫做语法糖先来看一个简单的装饰器函数实现：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="装饰器函数">
 <meta property="og:url" content="http://yoursite.com/2017/11/11/装饰器/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="装饰器函数装饰器：在函数运行时增加功能且不影响这个函数原有内容">
+<meta property="og:description" content="装饰器函数装饰器：在函数运行时增加功能且不影响这个函数原有内容普通装饰器函数语法：@func1def func2():    pass@符号为装饰器函数语法，也常叫做语法糖先来看一个简单的装饰器函数实现：">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-11-28T09:00:35.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="装饰器函数">
-<meta name="twitter:description" content="装饰器函数装饰器：在函数运行时增加功能且不影响这个函数原有内容">
+<meta name="twitter:description" content="装饰器函数装饰器：在函数运行时增加功能且不影响这个函数原有内容普通装饰器函数语法：@func1def func2():    pass@符号为装饰器函数语法，也常叫做语法糖先来看一个简单的装饰器函数实现：">
 
 <link rel="canonical" href="http://yoursite.com/2017/11/11/装饰器/">
 
@@ -263,10 +263,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>装饰器函数<br>装饰器：在函数运行时增加功能且不影响这个函数原有内容</p><a id="more"></a>
-<p>普通装饰器函数<br>语法：</p>
-<p>@func1<br>def func2():<br>    pass<br>@符号为装饰器函数语法，也常叫做语法糖</p>
-<p>先来看一个简单的装饰器函数实现：</p>
+        <p>装饰器函数<br>装饰器：在函数运行时增加功能且不影响这个函数原有内容</p><p>普通装饰器函数<br>语法：</p><p>@func1<br>def func2():<br>    pass<br>@符号为装饰器函数语法，也常叫做语法糖</p><p>先来看一个简单的装饰器函数实现：</p><a id="more"></a>
+
+
+
 <p>def wai(func):#装饰器函数，参数部分接收一个函数对象<br>    def nei():#闭包函数<br>        print(‘this is nei’) #要添加的功能<br>        return func()#返回接收到的函数func<br>    return nei #返回闭包函数</p>
 <p>#在func2()执行的时候，会将func()也执行<br>@wai<br>def foo():<br>    print(‘this is foo’)<br>foo()<br>执行后的结果：</p>
 <p>this is nei<br>this is foo<br>此时的foo函数在原有的基础上，额外多了装饰器函数中的定义的功能<br>被装饰函数foo在调用时，其实本质上是在进行 wai(foo)()</p>
