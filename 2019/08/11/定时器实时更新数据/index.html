@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="湫">
 <meta property="og:description" content="Vue中使用计时器实时刷新页面数据 需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例data(){return { intervalId:null }},methods:{// 定时刷新数据函数dataRefreh() {// 计时器正在进行中，退出函数i">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-02T07:08:19.424Z">
+<meta property="og:updated_time" content="2019-12-02T07:20:21.202Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="定时器实时更新数据">
 <meta name="twitter:description" content="Vue中使用计时器实时刷新页面数据 需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例data(){return { intervalId:null }},methods:{// 定时刷新数据函数dataRefreh() {// 计时器正在进行中，退出函数i">
@@ -160,7 +160,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">8</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">7</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -272,7 +272,21 @@
 </li>
 <li><p>代码分析<br>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
 </li>
+</ol><a id="more"></a>
+
+<p>————————————————————————————————</p>
+<p>Vue中使用计时器实时刷新页面数据</p>
+<ol>
+<li><p>需求说明<br>在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。</p>
+</li>
+<li><p>逻辑分析<br>如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。</p>
+</li>
+<li><p>代码示例<br>data(){<br>return {<br> intervalId:null<br> }<br>},<br>methods:{<br>// 定时刷新数据函数<br>dataRefreh() {<br>// 计时器正在进行中，退出函数<br>if (this.intervalId != null) {<br> return;<br>}<br>// 计时器为空，操作<br>this.intervalId = setInterval(() =&gt; {<br> console.log(“刷新” + new Date());<br> this.initData(); //加载数据函数<br>}, 5000);<br>},<br>// 停止定时器<br>clear() {<br>clearInterval(this.intervalId); //清除计时器<br>this.intervalId = null; //设置为null<br> },<br>},<br>created(){<br>this.dataRefreh();<br> },<br>destroyed(){<br>// 在页面销毁后，清除计时器<br>this.alear();<br> }</p>
+</li>
+<li><p>代码分析<br>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
+</li>
 </ol>
+
     </div>
 
     
@@ -373,7 +387,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

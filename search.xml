@@ -12,7 +12,21 @@
 </li>
 <li><p>代码分析<br>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
 </li>
-</ol>]]></content>
+</ol><a id="more"></a>
+
+<p>————————————————————————————————</p>
+<p>Vue中使用计时器实时刷新页面数据</p>
+<ol>
+<li><p>需求说明<br>在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。</p>
+</li>
+<li><p>逻辑分析<br>如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。</p>
+</li>
+<li><p>代码示例<br>data(){<br>return {<br> intervalId:null<br> }<br>},<br>methods:{<br>// 定时刷新数据函数<br>dataRefreh() {<br>// 计时器正在进行中，退出函数<br>if (this.intervalId != null) {<br> return;<br>}<br>// 计时器为空，操作<br>this.intervalId = setInterval(() =&gt; {<br> console.log(“刷新” + new Date());<br> this.initData(); //加载数据函数<br>}, 5000);<br>},<br>// 停止定时器<br>clear() {<br>clearInterval(this.intervalId); //清除计时器<br>this.intervalId = null; //设置为null<br> },<br>},<br>created(){<br>this.dataRefreh();<br> },<br>destroyed(){<br>// 在页面销毁后，清除计时器<br>this.alear();<br> }</p>
+</li>
+<li><p>代码分析<br>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
+</li>
+</ol>
+]]></content>
   </entry>
   <entry>
     <title>使用Redisearch实现的全文检索功能服务</title>
@@ -255,77 +269,6 @@ else:
 <p>def arg_func(choice=’Man’): #我们额外包装一层函数用来接收装饰器函数的参数<br>    def wai(func): #装饰器函数<br>        def nei(name): #闭包函数<br>            print(‘你好:’,name)<br>            if choice == ‘Man’: #如果装饰器函数接收到的参数值为Man<br>                print(‘去工作’)<br>            if choice == ‘Woman’:<br>                print(‘去逛街’)<br>            return func(name) #闭包函数返回被装饰函数调用<br>        return nei #装饰器函数返回内部闭包函数<br>    return wai #最外层函数返回装饰器函数<br>choice = input(‘请输入你的性别:’)<br>name = input(‘请输入你的名字:’)<br>@arg_func(choice)<br>def func(name):<br>    print(“你的名字是:”,name)<br>func(name)<br>执行的效果</p>
 <p>请输入你的性别:Man<br>请输入你的名字:张三<br>你好: 张三<br>去工作<br>你的名字是: 张三<br>请输入你的性别:Woman<br>请输入你的名字:李四<br>你好: 李四<br>去逛街<br>你的名字是: 李四<br>总结<br>实现装饰器</p>
 <p>定义闭包函数<br>闭包函数返回装饰器函数接收参数调用<br>装饰器函数参数部分接收被装饰函数对象<br>闭包函数参数部分接收被装饰函数参数部分<br>如果需要装饰器函数带参数，在最外层在包裹一层函数，形参部分接收装饰器函数参数，返回装饰器函数即可</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>正则表达式</title>
-    <url>/2017/10/11/%E6%AD%A3%E5%88%99%20-%20%E5%89%AF%E6%9C%AC/</url>
-    <content><![CDATA[<p>正则<br>一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则</p><a id="more"></a>
-<p>正则中的特殊符号<br>匹配一个范围： []<br>[A-Z]：A, B, C…<br>[0-9]：1, 2, 3…</p>
-<p>匹配任何数字字符：\d<br>\d：1, 2, 3…</p>
-<p>匹配任何空白符：\s<br>\s：\t (水平制表), \v (垂直制表), \n (换行), \r (回车), \f (换页)</p>
-<p>匹配任何数字、字母、字符及下划线：\w<br>\w： a, 1, _</p>
-<p>匹配除了换行符任意一个单个字符：.<br>a.c：abc, a2c, a_c<br>..：匹配任意字符组成的两个长度的字符串</p>
-<p>匹配前面出现的正则表达式0次或多次：<strong>*<br>a<em>：aaa 或是一个空<br>[abc]</em></strong>：aaabbb abc bbaacc</p>
-<p>匹配前面出现的正则表达式0次或一次：?<br>a?：a 或是一个空</p>
-<p>匹配前面出现的正则表达式1次或多次：+<br>a+：aaa a<br>abc+：abcabc</p>
-<p>匹配前面出现的正则表达式固定次数：{}<br>a{5}： aaaaa<br>\d{5}：12345, 22222</p>
-<p>匹配明确的多个选择：|<br>a | b：a, b<br>abc|cdf|123：abc, cdf, 123</p>
-<p>匹配字符串的开头或结尾：^, $<br>^abc：匹配所有以abc开头的字符串<br>abc$：匹配所有以abc结尾的字符串</p>
-<p>否定匹配：[^]<br>[^a]：匹配除了a之外的所有字符</p>
-<p>re模块函数<br>re.compile(pattern)<br>编译正则表达式<br>一般的，特殊字符再进行正则匹配的时候，如果你不预先编译正则表达式，解释器也会在你传入参数的时候进行编译<br>一些常用正则表达式，我们可以提前使用该函数进行预先编译，提高程序的效率</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>import re<br>regex = re.compile(‘abc’)<br>re.match(pattern,string)<br>尝试使用正则模式pattern在字符串中的开头进行严格匹配，如果开头匹配失败则匹配失败<br>匹配成功：返回一个匹配对象，匹配到的值可通过group函数获取<br>匹配失败：返回None</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>res = re.match(‘abc’,’abcac’)<br>&lt;_sre.SRE_Match object; span=(0, 3), match=’abc’&gt; #返回表示选择的区间以及匹配到的结果</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>res.group()<br>‘abc’<br>re.findall(pattern,string)<br>返回字符串中正则模式的所有非重复出现</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>re.findall(‘*‘,’a<em>b</em>c<em>‘)<br>[‘</em>‘, ‘<em>‘, ‘</em>‘]<br>注意：由于匹配的表达式中，我希望匹配的只是单纯的*****号，并不具有特殊意义，所以要加一个斜杠防止转义</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>re.search(pattern,string)<br>返回字符串中正则模式的第一次出现，没有匹配结果则返回None<br>结果可以通过返回值的group函数获取</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>res = re.search(‘*‘,’a<em>b</em>c<em>‘)<br>&lt;_sre.SRE_Match object; span=(1, 2), match=’</em>‘&gt;<br>res.group()<br>‘*’<br>re.sub(str1,str2,str3)<br>re.subn(str1,str2,str3)<br>str1：要替换的字符串<br>str2：替换成什么<br>str3：在哪个字符串里进行替换</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>这两个函数都可以实现搜索和替换功能，均返回一个替换之后的新字符串<br>subn函数会以元组形式包含一个表示替换的总数</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>var = re.sub(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>‘a_b_c</em>‘<br>var = re.subn(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>(‘a_b_c</em>‘, 3)<br>贪婪非贪婪<br>如果问号?紧跟在任何使用闭合（类似* + 这样的操作符）的匹配后面， 它将直接要求正则表达式引擎匹配尽可能少的次数，这叫做非贪婪</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>贪婪匹配：正则表达式引擎将试图“吸收”匹配该模式的尽可能多的字符<br>非贪婪匹配：问号要求正则表达式引擎去“偷懒”，如果可能，就在当前的正则表达式中尽可能少地匹配字符，留下尽可能多的字符给后面的模式</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>import re<br>mystr = ‘a<em>b</em>c<em>d</em>e<em>f</em>g’ac<br>re.findall(‘.+?’, mystr) #非贪婪模式进行匹配<br>[‘a’, ‘<em>‘, ‘b’, ‘</em>‘, ‘c’, ‘<em>‘, ‘d’, ‘</em>‘, ‘e’, ‘<em>‘, ‘f’, ‘</em>‘, ‘g’]<br>re.findall(‘.+’, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’]<br>re.findall(‘.<em>‘, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’, ‘’]<br>re.findall(‘.</em>?’, mystr) #非贪婪模式进行匹配<br>[‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’] #结果不同在于对+号和*号特殊字符的解释</p>
-</blockquote>
-</blockquote>
-</blockquote>
 ]]></content>
   </entry>
   <entry>
