@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>定时器实时更新数据</title>
-    <url>/2019/08/11/%E5%AE%9A%E6%97%B6%E5%99%A8/</url>
-    <content><![CDATA[<p>Vue中使用计时器实时刷新页面数据</p><ol>
-<li><p>需求说明<br>在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。</p>
-</li>
-<li><p>逻辑分析<br>如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。</p>
-</li>
-<li><p>代码示例<br>data(){<br> return {</p>
-<pre><code>intervalId:null</code></pre><p> }<br>},<br>methods:{<br>// 定时刷新数据函数<br> dataRefreh() {<br>   // 计时器正在进行中，退出函数<br>   if (this.intervalId != null) {</p>
-<pre><code>return;</code></pre><p>   }<br>   // 计时器为空，操作<br>   this.intervalId = setInterval(() =&gt; {</p>
-<pre><code>console.log(&quot;刷新&quot; + new Date());
-this.initData(); //加载数据函数</code></pre><p>   }, 5000);<br> },<br> // 停止定时器<br> clear() {<br>   clearInterval(this.intervalId); //清除计时器<br>   this.intervalId = null; //设置为null<br> },<br>},<br>created(){<br> this.dataRefreh();<br>},<br>destroyed(){<br> // 在页面销毁后，清除计时器<br> this.alear();<br>}</p>
-</li>
-<li><p>代码分析<br>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
-</li>
-</ol>]]></content>
-  </entry>
-  <entry>
     <title>定时器</title>
     <url>/2019/08/11/%E5%AE%9A%E6%97%B6%E5%99%A8%E5%AE%9E%E6%97%B6%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<p>Vue中使用计时器实时刷新页面数据</p><ol>
