@@ -51,17 +51,17 @@
   };
 </script>
 
-  <meta name="description" content="Vue中使用计时器实时刷新页面数据  需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例 data(){ return { intervalId:null } }, methods:{ // 定时刷新数据函数 dataRefreh() {   // 计时器正">
+  <meta name="description" content="Vue中使用计时器实时刷新页面数据 需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例data(){return { intervalId:null }},methods:{// 定时刷新数据函数dataRefreh() {// 计时器正在进行中，退出函数i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="定时器">
+<meta property="og:title" content="定时器实时更新数据">
 <meta property="og:url" content="http://yoursite.com/2019/08/11/定时器实时更新数据/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="Vue中使用计时器实时刷新页面数据  需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例 data(){ return { intervalId:null } }, methods:{ // 定时刷新数据函数 dataRefreh() {   // 计时器正">
+<meta property="og:description" content="Vue中使用计时器实时刷新页面数据 需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例data(){return { intervalId:null }},methods:{// 定时刷新数据函数dataRefreh() {// 计时器正在进行中，退出函数i">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-02T07:00:29.617Z">
+<meta property="og:updated_time" content="2019-12-02T07:08:19.424Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="定时器">
-<meta name="twitter:description" content="Vue中使用计时器实时刷新页面数据  需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例 data(){ return { intervalId:null } }, methods:{ // 定时刷新数据函数 dataRefreh() {   // 计时器正">
+<meta name="twitter:title" content="定时器实时更新数据">
+<meta name="twitter:description" content="Vue中使用计时器实时刷新页面数据 需求说明在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。  逻辑分析如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。  代码示例data(){return { intervalId:null }},methods:{// 定时刷新数据函数dataRefreh() {// 计时器正在进行中，退出函数i">
 
 <link rel="canonical" href="http://yoursite.com/2019/08/11/定时器实时更新数据/">
 
@@ -77,7 +77,7 @@
   };
 </script>
 
-  <title>定时器 | 湫</title>
+  <title>定时器实时更新数据 | 湫</title>
   
 
 
@@ -232,7 +232,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          定时器
+          定时器实时更新数据
         </h1>
 
         <div class="post-meta">
@@ -263,25 +263,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Vue中使用计时器实时刷新页面数据</p>
-<ol>
+        <p>Vue中使用计时器实时刷新页面数据</p><ol>
 <li><p>需求说明<br>在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。</p>
 </li>
 <li><p>逻辑分析<br>如果需要数据实时更新，我们自然是需要使用定时器，不断的调用接口数据，会相对的消耗内存。</p>
 </li>
-<li><p>代码示例<br> data(){<br> return {</p>
-<pre><code>intervalId:null
-}</code></pre><p> },<br> methods:{<br> // 定时刷新数据函数<br> dataRefreh() {<br>   // 计时器正在进行中，退出函数<br>   if (this.intervalId != null) {</p>
-<pre><code>return;</code></pre><p>   }<br>   // 计时器为空，操作<br>   this.intervalId = setInterval(() =&gt; {</p>
-<pre><code>console.log(&quot;刷新&quot; + new Date());
-this.initData(); //加载数据函数</code></pre><p>   }, 5000);<br> },<br> // 停止定时器<br> clear() {<br>   clearInterval(this.intervalId); //清除计时器<br>   this.intervalId = null; //设置为null</p>
-<pre><code>},</code></pre><p> },<br> created(){<br> this.dataRefreh();</p>
-<pre><code>},</code></pre><p> destroyed(){<br> // 在页面销毁后，清除计时器<br> this.alear();</p>
-<pre><code>}</code></pre></li>
+<li><p>代码示例<br>data(){<br>return {<br> intervalId:null<br> }<br>},<br>methods:{<br>// 定时刷新数据函数<br>dataRefreh() {<br>// 计时器正在进行中，退出函数<br>if (this.intervalId != null) {<br> return;<br>}<br>// 计时器为空，操作<br>this.intervalId = setInterval(() =&gt; {<br> console.log(“刷新” + new Date());<br> this.initData(); //加载数据函数<br>}, 5000);<br>},<br>// 停止定时器<br>clear() {<br>clearInterval(this.intervalId); //清除计时器<br>this.intervalId = null; //设置为null<br> },<br>},<br>created(){<br>this.dataRefreh();<br> },<br>destroyed(){<br>// 在页面销毁后，清除计时器<br>this.alear();<br> }</p>
+</li>
 <li><p>代码分析<br>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
-<a id="more"></a></li>
+</li>
 </ol>
-
     </div>
 
     
@@ -296,7 +287,7 @@ this.initData(); //加载数据函数</code></pre><p>   }, 5000);<br> },<br> // 
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/08/11/定时器实时更新数据/" title="定时器">http://yoursite.com/2019/08/11/定时器实时更新数据/</a>
+    <a href="http://yoursite.com/2019/08/11/定时器实时更新数据/" title="定时器实时更新数据">http://yoursite.com/2019/08/11/定时器实时更新数据/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
