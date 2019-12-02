@@ -67,9 +67,9 @@ Redisearch 是一个高效，功能完备的内存存储的高性能全文检索
   <entry>
     <title>Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口</title>
     <url>/2019/07/02/Python3.7.2+Django2.0.4%20%E7%BE%8E%E5%A4%9A%E5%95%86%E5%9F%8E%E9%9B%86%E6%88%90%E6%9C%80%E6%96%B0%E7%89%88%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3/</url>
-    <content><![CDATA[<p>  最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍</p><p>  在Mac系统下生成新版支付宝（2019年4月）支付接口私钥和公钥</p><p>  在Django中集成支付接口的前置操作就是需要安装pycryptodome</p><a id="more"></a>
-
-
+    <content><![CDATA[<p>  最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍</p><a id="more"></a>
+<p>  在Mac系统下生成新版支付宝（2019年4月）支付接口私钥和公钥</p>
+<p>  在Django中集成支付接口的前置操作就是需要安装pycryptodome</p>
 <p>  pip3 install -i <a href="https://pypi.douban.com/simple" target="_blank" rel="noopener">https://pypi.douban.com/simple</a> pycryptodome</p>
 <p>  然后将之前生成好的私钥和公钥（注意这里的公钥是指支付宝公钥），放入到项目目录中去</p>
 <p>  </p>
@@ -238,10 +238,10 @@ else:
   <entry>
     <title>装饰器函数</title>
     <url>/2017/11/11/%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
-    <content><![CDATA[<p>装饰器函数<br>装饰器：在函数运行时增加功能且不影响这个函数原有内容</p><p>普通装饰器函数<br>语法：</p><p>@func1<br>def func2():<br>    pass<br>@符号为装饰器函数语法，也常叫做语法糖</p><p>先来看一个简单的装饰器函数实现：</p><a id="more"></a>
-
-
-
+    <content><![CDATA[<p>装饰器函数<br>装饰器：在函数运行时增加功能且不影响这个函数原有内容</p><a id="more"></a>
+<p>普通装饰器函数<br>语法：</p>
+<p>@func1<br>def func2():<br>    pass<br>@符号为装饰器函数语法，也常叫做语法糖</p>
+<p>先来看一个简单的装饰器函数实现：</p>
 <p>def wai(func):#装饰器函数，参数部分接收一个函数对象<br>    def nei():#闭包函数<br>        print(‘this is nei’) #要添加的功能<br>        return func()#返回接收到的函数func<br>    return nei #返回闭包函数</p>
 <p>#在func2()执行的时候，会将func()也执行<br>@wai<br>def foo():<br>    print(‘this is foo’)<br>foo()<br>执行后的结果：</p>
 <p>this is nei<br>this is foo<br>此时的foo函数在原有的基础上，额外多了装饰器函数中的定义的功能<br>被装饰函数foo在调用时，其实本质上是在进行 wai(foo)()</p>
@@ -259,10 +259,81 @@ else:
   </entry>
   <entry>
     <title>正则表达式</title>
+    <url>/2017/10/11/%E6%AD%A3%E5%88%99%20-%20%E5%89%AF%E6%9C%AC/</url>
+    <content><![CDATA[<p>正则<br>一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则</p><a id="more"></a>
+<p>正则中的特殊符号<br>匹配一个范围： []<br>[A-Z]：A, B, C…<br>[0-9]：1, 2, 3…</p>
+<p>匹配任何数字字符：\d<br>\d：1, 2, 3…</p>
+<p>匹配任何空白符：\s<br>\s：\t (水平制表), \v (垂直制表), \n (换行), \r (回车), \f (换页)</p>
+<p>匹配任何数字、字母、字符及下划线：\w<br>\w： a, 1, _</p>
+<p>匹配除了换行符任意一个单个字符：.<br>a.c：abc, a2c, a_c<br>..：匹配任意字符组成的两个长度的字符串</p>
+<p>匹配前面出现的正则表达式0次或多次：<strong>*<br>a<em>：aaa 或是一个空<br>[abc]</em></strong>：aaabbb abc bbaacc</p>
+<p>匹配前面出现的正则表达式0次或一次：?<br>a?：a 或是一个空</p>
+<p>匹配前面出现的正则表达式1次或多次：+<br>a+：aaa a<br>abc+：abcabc</p>
+<p>匹配前面出现的正则表达式固定次数：{}<br>a{5}： aaaaa<br>\d{5}：12345, 22222</p>
+<p>匹配明确的多个选择：|<br>a | b：a, b<br>abc|cdf|123：abc, cdf, 123</p>
+<p>匹配字符串的开头或结尾：^, $<br>^abc：匹配所有以abc开头的字符串<br>abc$：匹配所有以abc结尾的字符串</p>
+<p>否定匹配：[^]<br>[^a]：匹配除了a之外的所有字符</p>
+<p>re模块函数<br>re.compile(pattern)<br>编译正则表达式<br>一般的，特殊字符再进行正则匹配的时候，如果你不预先编译正则表达式，解释器也会在你传入参数的时候进行编译<br>一些常用正则表达式，我们可以提前使用该函数进行预先编译，提高程序的效率</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import re<br>regex = re.compile(‘abc’)<br>re.match(pattern,string)<br>尝试使用正则模式pattern在字符串中的开头进行严格匹配，如果开头匹配失败则匹配失败<br>匹配成功：返回一个匹配对象，匹配到的值可通过group函数获取<br>匹配失败：返回None</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>res = re.match(‘abc’,’abcac’)<br>&lt;_sre.SRE_Match object; span=(0, 3), match=’abc’&gt; #返回表示选择的区间以及匹配到的结果</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>res.group()<br>‘abc’<br>re.findall(pattern,string)<br>返回字符串中正则模式的所有非重复出现</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>re.findall(‘*‘,’a<em>b</em>c<em>‘)<br>[‘</em>‘, ‘<em>‘, ‘</em>‘]<br>注意：由于匹配的表达式中，我希望匹配的只是单纯的*****号，并不具有特殊意义，所以要加一个斜杠防止转义</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>re.search(pattern,string)<br>返回字符串中正则模式的第一次出现，没有匹配结果则返回None<br>结果可以通过返回值的group函数获取</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>res = re.search(‘*‘,’a<em>b</em>c<em>‘)<br>&lt;_sre.SRE_Match object; span=(1, 2), match=’</em>‘&gt;<br>res.group()<br>‘*’<br>re.sub(str1,str2,str3)<br>re.subn(str1,str2,str3)<br>str1：要替换的字符串<br>str2：替换成什么<br>str3：在哪个字符串里进行替换</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>这两个函数都可以实现搜索和替换功能，均返回一个替换之后的新字符串<br>subn函数会以元组形式包含一个表示替换的总数</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>var = re.sub(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>‘a_b_c</em>‘<br>var = re.subn(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>(‘a_b_c</em>‘, 3)<br>贪婪非贪婪<br>如果问号?紧跟在任何使用闭合（类似* + 这样的操作符）的匹配后面， 它将直接要求正则表达式引擎匹配尽可能少的次数，这叫做非贪婪</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>贪婪匹配：正则表达式引擎将试图“吸收”匹配该模式的尽可能多的字符<br>非贪婪匹配：问号要求正则表达式引擎去“偷懒”，如果可能，就在当前的正则表达式中尽可能少地匹配字符，留下尽可能多的字符给后面的模式</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import re<br>mystr = ‘a<em>b</em>c<em>d</em>e<em>f</em>g’ac<br>re.findall(‘.+?’, mystr) #非贪婪模式进行匹配<br>[‘a’, ‘<em>‘, ‘b’, ‘</em>‘, ‘c’, ‘<em>‘, ‘d’, ‘</em>‘, ‘e’, ‘<em>‘, ‘f’, ‘</em>‘, ‘g’]<br>re.findall(‘.+’, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’]<br>re.findall(‘.<em>‘, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’, ‘’]<br>re.findall(‘.</em>?’, mystr) #非贪婪模式进行匹配<br>[‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’] #结果不同在于对+号和*号特殊字符的解释</p>
+</blockquote>
+</blockquote>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>正则表达式</title>
     <url>/2017/10/11/%E6%AD%A3%E5%88%99/</url>
-    <content><![CDATA[<p>正则<br>一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则</p><p>正则中的特殊符号<br>匹配一个范围： []<br>[A-Z]：A, B, C…<br>[0-9]：1, 2, 3…</p><p>匹配任何数字字符：\d<br>\d：1, 2, 3…</p><a id="more"></a>
-
-
+    <content><![CDATA[<p>正则<br>一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则</p><a id="more"></a>
+<p>正则中的特殊符号<br>匹配一个范围： []<br>[A-Z]：A, B, C…<br>[0-9]：1, 2, 3…</p>
+<p>匹配任何数字字符：\d<br>\d：1, 2, 3…</p>
 <p>匹配任何空白符：\s<br>\s：\t (水平制表), \v (垂直制表), \n (换行), \r (回车), \f (换页)</p>
 <p>匹配任何数字、字母、字符及下划线：\w<br>\w： a, 1, _</p>
 <p>匹配除了换行符任意一个单个字符：.<br>a.c：abc, a2c, a_c<br>..：匹配任意字符组成的两个长度的字符串</p>
@@ -331,9 +402,9 @@ else:
   <entry>
     <title>数据库索引</title>
     <url>/2017/10/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/</url>
-    <content><![CDATA[<p>引言<br>说白了,数据库的索引问题就是查找问题</p><p>数据库索引,是数据库管理系统中一个排序的数据结构,以协助快速查询,更新数据库中表的数据.索引的实现通常使用B树和变种的B+树(mysql常用的索引就是B+树)</p><p>除了数据之外,数据库系统还维护为满足特定查找算法的数据结构,这些数据结构以某种方式引用数据.这种数据结构就是索引</p><a id="more"></a>
+    <content><![CDATA[<p>引言<br>说白了,数据库的索引问题就是查找问题</p><p>数据库索引,是数据库管理系统中一个排序的数据结构,以协助快速查询,更新数据库中表的数据.索引的实现通常使用B树和变种的B+树(mysql常用的索引就是B+树)</p><a id="more"></a>
 
-
+<p>除了数据之外,数据库系统还维护为满足特定查找算法的数据结构,这些数据结构以某种方式引用数据.这种数据结构就是索引</p>
 <p>创建索引的好处<br>①通过创建索引,可以在查询的过程中,提高系统的性能</p>
 <p>②通过创建唯一性索引,可以保证数据库表中每一行数据的唯一性</p>
 <p>③在使用分组和排序子句进行数据检索时,可以减少查询中分组和排序的时间</p>

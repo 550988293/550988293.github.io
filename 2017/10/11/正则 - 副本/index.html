@@ -51,19 +51,19 @@
   };
 </script>
 
-  <meta name="description" content="最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍">
+  <meta name="description" content="正则一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口">
-<meta property="og:url" content="http://yoursite.com/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/index.html">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="http://yoursite.com/2017/10/11/正则 - 副本/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍">
+<meta property="og:description" content="正则一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-28T09:01:52.531Z">
+<meta property="og:updated_time" content="2019-11-28T08:56:47.372Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口">
-<meta name="twitter:description" content="最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍">
+<meta name="twitter:title" content="正则表达式">
+<meta name="twitter:description" content="正则一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则">
 
-<link rel="canonical" href="http://yoursite.com/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/">
+<link rel="canonical" href="http://yoursite.com/2017/10/11/正则 - 副本/">
 
 
 <script id="page-configurations">
@@ -77,7 +77,7 @@
   };
 </script>
 
-  <title>Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口 | 湫</title>
+  <title>正则表达式 | 湫</title>
   
 
 
@@ -219,7 +219,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/正则 - 副本/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/lufei.jpg">
@@ -232,7 +232,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口
+          正则表达式
         </h1>
 
         <div class="post-meta">
@@ -242,7 +242,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-02 18:26:32" itemprop="dateCreated datePublished" datetime="2019-07-02T18:26:32+08:00">2019-07-02</time>
+              <time title="创建时间：2017-10-11 00:00:00" itemprop="dateCreated datePublished" datetime="2017-10-11T00:00:00+08:00">2017-10-11</time>
             </span>
 
           
@@ -263,156 +263,73 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>  最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍</p><a id="more"></a>
-<p>  在Mac系统下生成新版支付宝（2019年4月）支付接口私钥和公钥</p>
-<p>  在Django中集成支付接口的前置操作就是需要安装pycryptodome</p>
-<p>  pip3 install -i <a href="https://pypi.douban.com/simple" target="_blank" rel="noopener">https://pypi.douban.com/simple</a> pycryptodome</p>
-<p>  然后将之前生成好的私钥和公钥（注意这里的公钥是指支付宝公钥），放入到项目目录中去</p>
-<p>  </p>
-<p>  <br>  <br>  文档地址：<a href="https://docs.open.alipay.com/api" target="_blank" rel="noopener">https://docs.open.alipay.com/api</a></p>
-<p>  然后根据支付宝官网文档写一个支付基类 pay.py</p>
-<p>from datetime import datetime<br>from Crypto.PublicKey import RSA<br>from Crypto.Signature import PKCS1_v1_5<br>from Crypto.Hash import SHA256<br>from urllib.parse import quote_plus<br>from urllib.parse import urlparse, parse_qs<br>from base64 import decodebytes, encodebytes<br>import json</p>
-<p>class AliPay(object):<br>    “””<br>    支付宝支付接口(PC端支付接口)<br>    “””</p>
-<pre><code>def __init__(self, appid, app_notify_url, app_private_key_path,
-             alipay_public_key_path, return_url, debug=False):
-    self.appid = appid
-    self.app_notify_url = app_notify_url
-    self.app_private_key_path = app_private_key_path
-    self.app_private_key = None
-    self.return_url = return_url
-    with open(self.app_private_key_path) as fp:
-        self.app_private_key = RSA.importKey(fp.read())
-    self.alipay_public_key_path = alipay_public_key_path
-    with open(self.alipay_public_key_path) as fp:
-        self.alipay_public_key = RSA.importKey(fp.read())
+        <p>正则<br>一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则</p><a id="more"></a>
+<p>正则中的特殊符号<br>匹配一个范围： []<br>[A-Z]：A, B, C…<br>[0-9]：1, 2, 3…</p>
+<p>匹配任何数字字符：\d<br>\d：1, 2, 3…</p>
+<p>匹配任何空白符：\s<br>\s：\t (水平制表), \v (垂直制表), \n (换行), \r (回车), \f (换页)</p>
+<p>匹配任何数字、字母、字符及下划线：\w<br>\w： a, 1, _</p>
+<p>匹配除了换行符任意一个单个字符：.<br>a.c：abc, a2c, a_c<br>..：匹配任意字符组成的两个长度的字符串</p>
+<p>匹配前面出现的正则表达式0次或多次：<strong>*<br>a<em>：aaa 或是一个空<br>[abc]</em></strong>：aaabbb abc bbaacc</p>
+<p>匹配前面出现的正则表达式0次或一次：?<br>a?：a 或是一个空</p>
+<p>匹配前面出现的正则表达式1次或多次：+<br>a+：aaa a<br>abc+：abcabc</p>
+<p>匹配前面出现的正则表达式固定次数：{}<br>a{5}： aaaaa<br>\d{5}：12345, 22222</p>
+<p>匹配明确的多个选择：|<br>a | b：a, b<br>abc|cdf|123：abc, cdf, 123</p>
+<p>匹配字符串的开头或结尾：^, $<br>^abc：匹配所有以abc开头的字符串<br>abc$：匹配所有以abc结尾的字符串</p>
+<p>否定匹配：[^]<br>[^a]：匹配除了a之外的所有字符</p>
+<p>re模块函数<br>re.compile(pattern)<br>编译正则表达式<br>一般的，特殊字符再进行正则匹配的时候，如果你不预先编译正则表达式，解释器也会在你传入参数的时候进行编译<br>一些常用正则表达式，我们可以提前使用该函数进行预先编译，提高程序的效率</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import re<br>regex = re.compile(‘abc’)<br>re.match(pattern,string)<br>尝试使用正则模式pattern在字符串中的开头进行严格匹配，如果开头匹配失败则匹配失败<br>匹配成功：返回一个匹配对象，匹配到的值可通过group函数获取<br>匹配失败：返回None</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>res = re.match(‘abc’,’abcac’)<br>&lt;_sre.SRE_Match object; span=(0, 3), match=’abc’&gt; #返回表示选择的区间以及匹配到的结果</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>res.group()<br>‘abc’<br>re.findall(pattern,string)<br>返回字符串中正则模式的所有非重复出现</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>re.findall(‘*‘,’a<em>b</em>c<em>‘)<br>[‘</em>‘, ‘<em>‘, ‘</em>‘]<br>注意：由于匹配的表达式中，我希望匹配的只是单纯的*****号，并不具有特殊意义，所以要加一个斜杠防止转义</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>re.search(pattern,string)<br>返回字符串中正则模式的第一次出现，没有匹配结果则返回None<br>结果可以通过返回值的group函数获取</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>res = re.search(‘*‘,’a<em>b</em>c<em>‘)<br>&lt;_sre.SRE_Match object; span=(1, 2), match=’</em>‘&gt;<br>res.group()<br>‘*’<br>re.sub(str1,str2,str3)<br>re.subn(str1,str2,str3)<br>str1：要替换的字符串<br>str2：替换成什么<br>str3：在哪个字符串里进行替换</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>这两个函数都可以实现搜索和替换功能，均返回一个替换之后的新字符串<br>subn函数会以元组形式包含一个表示替换的总数</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>var = re.sub(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>‘a_b_c</em>‘<br>var = re.subn(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>(‘a_b_c</em>‘, 3)<br>贪婪非贪婪<br>如果问号?紧跟在任何使用闭合（类似* + 这样的操作符）的匹配后面， 它将直接要求正则表达式引擎匹配尽可能少的次数，这叫做非贪婪</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>贪婪匹配：正则表达式引擎将试图“吸收”匹配该模式的尽可能多的字符<br>非贪婪匹配：问号要求正则表达式引擎去“偷懒”，如果可能，就在当前的正则表达式中尽可能少地匹配字符，留下尽可能多的字符给后面的模式</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>import re<br>mystr = ‘a<em>b</em>c<em>d</em>e<em>f</em>g’ac<br>re.findall(‘.+?’, mystr) #非贪婪模式进行匹配<br>[‘a’, ‘<em>‘, ‘b’, ‘</em>‘, ‘c’, ‘<em>‘, ‘d’, ‘</em>‘, ‘e’, ‘<em>‘, ‘f’, ‘</em>‘, ‘g’]<br>re.findall(‘.+’, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’]<br>re.findall(‘.<em>‘, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’, ‘’]<br>re.findall(‘.</em>?’, mystr) #非贪婪模式进行匹配<br>[‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’] #结果不同在于对+号和*号特殊字符的解释</p>
+</blockquote>
+</blockquote>
+</blockquote>
 
-    if debug is True:
-        self.__gateway = &quot;https://openapi.alipaydev.com/gateway.do&quot;
-    else:
-        self.__gateway = &quot;https://openapi.alipay.com/gateway.do&quot;
-
-def direct_pay(self, subject, out_trade_no, total_amount, return_url=None, **kwargs):
-    biz_content = {
-        &quot;subject&quot;: subject,
-        &quot;out_trade_no&quot;: out_trade_no,
-        &quot;total_amount&quot;: total_amount,
-        &quot;product_code&quot;: &quot;FAST_INSTANT_TRADE_PAY&quot;,
-        # &quot;qr_pay_mode&quot;:4
-    }
-
-    biz_content.update(kwargs)
-    data = self.build_body(&quot;alipay.trade.page.pay&quot;, biz_content, self.return_url)
-    return self.sign_data(data)
-
-def build_body(self, method, biz_content, return_url=None):
-    data = {
-        &quot;app_id&quot;: self.appid,
-        &quot;method&quot;: method,
-        &quot;charset&quot;: &quot;utf-8&quot;,
-        &quot;sign_type&quot;: &quot;RSA2&quot;,
-        &quot;timestamp&quot;: datetime.now().strftime(&quot;%Y-%m-%d %H:%M:%S&quot;),
-        &quot;version&quot;: &quot;1.0&quot;,
-        &quot;biz_content&quot;: biz_content
-    }
-
-    if return_url is not None:
-        data[&quot;notify_url&quot;] = self.app_notify_url
-        data[&quot;return_url&quot;] = self.return_url
-
-    return data
-
-def sign_data(self, data):
-    data.pop(&quot;sign&quot;, None)
-    # 排序后的字符串
-    unsigned_items = self.ordered_data(data)
-    unsigned_string = &quot;&amp;&quot;.join(&quot;{0}={1}&quot;.format(k, v) for k, v in unsigned_items)
-    sign = self.sign(unsigned_string.encode(&quot;utf-8&quot;))
-    # ordered_items = self.ordered_data(data)
-    quoted_string = &quot;&amp;&quot;.join(&quot;{0}={1}&quot;.format(k, quote_plus(v)) for k, v in unsigned_items)
-
-    # 获得最终的订单信息字符串
-    signed_string = quoted_string + &quot;&amp;sign=&quot; + quote_plus(sign)
-    return signed_string
-
-def ordered_data(self, data):
-    complex_keys = []
-    for key, value in data.items():
-        if isinstance(value, dict):
-            complex_keys.append(key)
-
-    # 将字典类型的数据dump出来
-    for key in complex_keys:
-        data[key] = json.dumps(data[key], separators=(&apos;,&apos;, &apos;:&apos;))
-
-    return sorted([(k, v) for k, v in data.items()])
-
-def sign(self, unsigned_string):
-    # 开始计算签名
-    key = self.app_private_key
-    signer = PKCS1_v1_5.new(key)
-    signature = signer.sign(SHA256.new(unsigned_string))
-    # base64 编码，转换为unicode表示并移除回车
-    sign = encodebytes(signature).decode(&quot;utf8&quot;).replace(&quot;n&quot;, &quot;&quot;)
-    return sign
-
-def _verify(self, raw_content, signature):
-    # 开始计算签名
-    key = self.alipay_public_key
-    signer = PKCS1_v1_5.new(key)
-    digest = SHA256.new()
-    digest.update(raw_content.encode(&quot;utf8&quot;))
-    if signer.verify(digest, decodebytes(signature.encode(&quot;utf8&quot;))):
-        return True
-    return False
-
-def verify(self, data, signature):
-    if &quot;sign_type&quot; in data:
-        sign_type = data.pop(&quot;sign_type&quot;)
-    # 排序后的字符串
-    unsigned_items = self.ordered_data(data)
-    message = &quot;&amp;&quot;.join(u&quot;{}={}&quot;.format(k, v) for k, v in unsigned_items)
-    return self._verify(message, signature)
-
-最后在视图文件中定义方法就可以了</code></pre><p>#导入支付基类<br>from .pay import Alipay</p>
-<p>#初始化阿里支付对象<br>def get_ali_object():<br>    # 沙箱环境地址：<a href="https://openhome.alipay.com/platform/appDaily.htm?tab=info" target="_blank" rel="noopener">https://openhome.alipay.com/platform/appDaily.htm?tab=info</a><br>    app_id = “2016092600603658”  #  APPID （沙箱应用）</p>
-<pre><code># 支付完成后，支付偷偷向这里地址发送一个post请求，识别公网IP,如果是 192.168.20.13局域网IP ,支付宝找不到，def page2() 接收不到这个请求
-notify_url = &quot;http://localhost:8000/md_admin/alipayreturn&quot;
-
-# 支付完成后，跳转的地址。
-return_url = &quot;http://localhost:8000/md_admin/alipayreturn&quot;
-
-merchant_private_key_path = &quot;c:/Users/liuyue/www/md/keys/app_private_2048.txt&quot; # 应用私钥
-alipay_public_key_path = &quot;c:/Users/liuyue/www/md/keys/alipay_public_2048.txt&quot;  # 支付宝公钥
-
-alipay = AliPay(
-    appid=app_id,
-    app_notify_url=notify_url,
-    return_url=return_url,
-    app_private_key_path=merchant_private_key_path,
-    alipay_public_key_path=alipay_public_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥
-    debug=True,  # 默认False,
-)
-return alipay</code></pre><p>def page1(request):</p>
-<pre><code>if request.method == &quot;POST&quot;:
-
-    # 根据当前用户的配置，生成URL，并跳转。
-    money = float(request.POST.get(&apos;money&apos;))
-
-    alipay = get_ali_object()
-
-    # 生成支付的url
-    query_params = alipay.direct_pay(
-        subject=&quot;test&quot;,  # 商品简单描述
-        out_trade_no=&quot;myorder&quot; + str(time.time()),  # 用户购买的商品订单号（每次不一样） 20180301073422891
-        total_amount=money,  # 交易金额(单位: 元 保留俩位小数)
-    )
-
-    pay_url = &quot;https://openapi.alipaydev.com/gateway.do?{0}&quot;.format(query_params)  # 支付宝网关地址（沙箱应用）
-
-    return redirect(pay_url)
-else:
-    return render(request,&apos;md_admin/page1.html&apos;)</code></pre><p>def alipay_return(request):<br>    alipay = get_ali_object()<br>    params = request.GET.dict()<br>    sign = params.pop(‘sign’, None)<br>    status = alipay.verify(params, sign)<br>    print(‘==================开始==================’)<br>    print(‘GET验证’, status)<br>    print(‘==================结束==================’)<br>    return HttpResponse(‘支付成功’)</p>
-<pre><code>搞定收工</code></pre>
     </div>
 
     
@@ -427,7 +344,7 @@ else:
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/" title="Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口">http://yoursite.com/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/</a>
+    <a href="http://yoursite.com/2017/10/11/正则 - 副本/" title="正则表达式">http://yoursite.com/2017/10/11/正则 - 副本/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -452,16 +369,16 @@ else:
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/" rel="next" title="使用python3和高性能全文检索引擎Redisearch进行交互">
-                  <i class="fa fa-chevron-left"></i> 使用python3和高性能全文检索引擎Redisearch进行交互
+                <a href="/2017/10/11/正则/" rel="next" title="正则表达式">
+                  <i class="fa fa-chevron-left"></i> 正则表达式
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/08/06/使用Redisearch实现的全文检索功能服务/" rel="prev" title="使用Redisearch实现的全文检索功能服务">
-                  使用Redisearch实现的全文检索功能服务 <i class="fa fa-chevron-right"></i>
+                <a href="/2017/11/11/装饰器/" rel="prev" title="装饰器函数">
+                  装饰器函数 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
