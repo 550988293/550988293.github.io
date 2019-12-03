@@ -13,6 +13,9 @@
 <p>###代码分析</p>
 <p>首先选择数据刷新的时机，在created中。<br>声明计时器，与数据刷新函数。<br>在页面销毁的时机（destroyed），关闭计时器等耗时操作。</p>
 ]]></content>
+      <categories>
+        <category>VUE</category>
+      </categories>
       <tags>
         <tag>VUE</tag>
       </tags>
@@ -66,6 +69,9 @@ redis 数据持久化支持。
 
 
 Redisearch 是一个高效，功能完备的内存存储的高性能全文检索组件， 十分适合应用在数据量适中， 内存和存储空间有限的环境。借助数据同步手段，我们可以很方便的将redisearch 结合到现有的数据存储中， 进而向产品提供 全文检索， 自动补全等服务优化功能。</code></pre>]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
       <tags>
         <tag>Redis</tag>
       </tags>
@@ -223,6 +229,9 @@ return alipay</code></pre><p>def page1(request):</p>
 else:
     return render(request,&apos;md_admin/page1.html&apos;)</code></pre><p>def alipay_return(request):<br>    alipay = get_ali_object()<br>    params = request.GET.dict()<br>    sign = params.pop(‘sign’, None)<br>    status = alipay.verify(params, sign)<br>    print(‘==================开始==================’)<br>    print(‘GET验证’, status)<br>    print(‘==================结束==================’)<br>    return HttpResponse(‘支付成功’)</p>
 <pre><code>搞定收工</code></pre>]]></content>
+      <categories>
+        <category>Django</category>
+      </categories>
       <tags>
         <tag>Django</tag>
       </tags>
@@ -243,6 +252,9 @@ else:
 <p>#获取当前索引的基本信息<br>client.info()</p>
 <p>#删除文档<br>client.delete_document(‘doc2’)</p>
 <pre><code>还是非常简单的，基本上，我们可以抛弃ES了，因为研发人员都是喜新厌旧的。</code></pre>]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
       <tags>
         <tag>Redis</tag>
       </tags>
@@ -345,6 +357,9 @@ else:
 </blockquote>
 </blockquote>
 ]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
       <tags>
         <tag>Python</tag>
       </tags>
@@ -441,6 +456,9 @@ else:
 <p>运算符为and时–尽量把为假的放在右边</p>
 <p>运算符为or时–尽量把为真的放在右边</p>
 ]]></content>
+      <categories>
+        <category>MySql</category>
+      </categories>
       <tags>
         <tag>MySql</tag>
       </tags>
