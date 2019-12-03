@@ -51,20 +51,18 @@
   };
 </script>
 
-  <meta name="description" content="正则一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则">
-<meta name="keywords" content="Python">
-<meta property="og:type" content="article">
-<meta property="og:title" content="正则表达式">
-<meta property="og:url" content="http://yoursite.com/2017/10/11/正则/index.html">
+  <meta name="description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
+<meta property="og:type" content="website">
+<meta property="og:title" content="湫">
+<meta property="og:url" content="http://yoursite.com/categories/Python/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="正则一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则">
+<meta property="og:description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-03T07:44:28.348Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="正则表达式">
-<meta name="twitter:description" content="正则一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则">
+<meta name="twitter:title" content="湫">
+<meta name="twitter:description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
 
-<link rel="canonical" href="http://yoursite.com/2017/10/11/正则/">
+<link rel="canonical" href="http://yoursite.com/categories/Python/">
 
 
 <script id="page-configurations">
@@ -72,13 +70,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true,
+    isPost: false,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>正则表达式 | 湫</title>
+  <title>分类: Python | 湫</title>
   
 
 
@@ -215,185 +213,50 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/11/正则/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/lufei.jpg">
-      <meta itemprop="name" content="SWS">
-      <meta itemprop="description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="湫">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          正则表达式
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h1 class="collection-header">Python
+          <small>分类</small>
         </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-11 00:00:00" itemprop="dateCreated datePublished" datetime="2017-10-11T00:00:00+08:00">2017-10-11</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>正则<br>一些特殊符号及文本组合在一起的用来描述字符或字符串的一些规则，叫做正则</p><a id="more"></a>
-<p>正则中的特殊符号<br>匹配一个范围： []<br>[A-Z]：A, B, C…<br>[0-9]：1, 2, 3…</p>
-<p>匹配任何数字字符：\d<br>\d：1, 2, 3…</p>
-<p>匹配任何空白符：\s<br>\s：\t (水平制表), \v (垂直制表), \n (换行), \r (回车), \f (换页)</p>
-<p>匹配任何数字、字母、字符及下划线：\w<br>\w： a, 1, _</p>
-<p>匹配除了换行符任意一个单个字符：.<br>a.c：abc, a2c, a_c<br>..：匹配任意字符组成的两个长度的字符串</p>
-<p>匹配前面出现的正则表达式0次或多次：<strong>*<br>a<em>：aaa 或是一个空<br>[abc]</em></strong>：aaabbb abc bbaacc</p>
-<p>匹配前面出现的正则表达式0次或一次：?<br>a?：a 或是一个空</p>
-<p>匹配前面出现的正则表达式1次或多次：+<br>a+：aaa a<br>abc+：abcabc</p>
-<p>匹配前面出现的正则表达式固定次数：{}<br>a{5}： aaaaa<br>\d{5}：12345, 22222</p>
-<p>匹配明确的多个选择：|<br>a | b：a, b<br>abc|cdf|123：abc, cdf, 123</p>
-<p>匹配字符串的开头或结尾：^, $<br>^abc：匹配所有以abc开头的字符串<br>abc$：匹配所有以abc结尾的字符串</p>
-<p>否定匹配：[^]<br>[^a]：匹配除了a之外的所有字符</p>
-<p>re模块函数<br>re.compile(pattern)<br>编译正则表达式<br>一般的，特殊字符再进行正则匹配的时候，如果你不预先编译正则表达式，解释器也会在你传入参数的时候进行编译<br>一些常用正则表达式，我们可以提前使用该函数进行预先编译，提高程序的效率</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>import re<br>regex = re.compile(‘abc’)<br>re.match(pattern,string)<br>尝试使用正则模式pattern在字符串中的开头进行严格匹配，如果开头匹配失败则匹配失败<br>匹配成功：返回一个匹配对象，匹配到的值可通过group函数获取<br>匹配失败：返回None</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>res = re.match(‘abc’,’abcac’)<br>&lt;_sre.SRE_Match object; span=(0, 3), match=’abc’&gt; #返回表示选择的区间以及匹配到的结果</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>res.group()<br>‘abc’<br>re.findall(pattern,string)<br>返回字符串中正则模式的所有非重复出现</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>re.findall(‘*‘,’a<em>b</em>c<em>‘)<br>[‘</em>‘, ‘<em>‘, ‘</em>‘]<br>注意：由于匹配的表达式中，我希望匹配的只是单纯的*****号，并不具有特殊意义，所以要加一个斜杠防止转义</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>re.search(pattern,string)<br>返回字符串中正则模式的第一次出现，没有匹配结果则返回None<br>结果可以通过返回值的group函数获取</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>res = re.search(‘*‘,’a<em>b</em>c<em>‘)<br>&lt;_sre.SRE_Match object; span=(1, 2), match=’</em>‘&gt;<br>res.group()<br>‘*’<br>re.sub(str1,str2,str3)<br>re.subn(str1,str2,str3)<br>str1：要替换的字符串<br>str2：替换成什么<br>str3：在哪个字符串里进行替换</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>这两个函数都可以实现搜索和替换功能，均返回一个替换之后的新字符串<br>subn函数会以元组形式包含一个表示替换的总数</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>var = re.sub(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>‘a_b_c</em>‘<br>var = re.subn(‘*‘,’<em>‘,’a<em>b</em>c*’)<br>var<br>(‘a_b_c</em>‘, 3)<br>贪婪非贪婪<br>如果问号?紧跟在任何使用闭合（类似* + 这样的操作符）的匹配后面， 它将直接要求正则表达式引擎匹配尽可能少的次数，这叫做非贪婪</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<p>贪婪匹配：正则表达式引擎将试图“吸收”匹配该模式的尽可能多的字符<br>非贪婪匹配：问号要求正则表达式引擎去“偷懒”，如果可能，就在当前的正则表达式中尽可能少地匹配字符，留下尽可能多的字符给后面的模式</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>import re<br>mystr = ‘a<em>b</em>c<em>d</em>e<em>f</em>g’ac<br>re.findall(‘.+?’, mystr) #非贪婪模式进行匹配<br>[‘a’, ‘<em>‘, ‘b’, ‘</em>‘, ‘c’, ‘<em>‘, ‘d’, ‘</em>‘, ‘e’, ‘<em>‘, ‘f’, ‘</em>‘, ‘g’]<br>re.findall(‘.+’, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’]<br>re.findall(‘.<em>‘, mystr) #贪婪模式进行匹配<br>[‘a<em>b</em>c<em>d</em>e<em>f</em>g’, ‘’]<br>re.findall(‘.</em>?’, mystr) #非贪婪模式进行匹配<br>[‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’, ‘’] #结果不同在于对+号和*号特殊字符的解释</p>
-</blockquote>
-</blockquote>
-</blockquote>
-
-    </div>
-
-    
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>SWS
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2017/10/11/正则/" title="正则表达式">http://yoursite.com/2017/10/11/正则/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <div>
-        
-          <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
-    
-</div>
-        
       </div>
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Python/" rel="tag"># Python</a>
-          </div>
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2017</h1>
+    </div>
 
-        
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-                <a href="/2017/10/03/数据库索引/" rel="next" title="数据库索引">
-                  <i class="fa fa-chevron-left"></i> 数据库索引
-                </a>
-            </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2017-11-11T00:00:00+08:00"
+              content="2017-11-11">
+          11-11
+        </time>
+      </div>
 
-            <span class="post-nav-divider"></span>
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2017/11/11/装饰器/" itemprop="url">
+            <span itemprop="name">装饰器函数</span>
+          </a>
+      </h2>
 
-            <div class="post-nav-prev post-nav-item">
-                <a href="/2017/11/11/装饰器/" rel="prev" title="装饰器函数">
-                  装饰器函数 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-      </footer>
-    
+    </header>
   </article>
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+
 
 
           </div>
