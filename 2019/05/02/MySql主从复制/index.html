@@ -51,19 +51,20 @@
   };
 </script>
 
-  <meta name="description" content="上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:https://github.com/RediSearch/redisearch-py">
+  <meta name="description" content="Mysql主从复制什么是主从复制？主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从">
+<meta name="keywords" content="MySql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用python3和高性能全文检索引擎Redisearch进行交互">
-<meta property="og:url" content="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/index.html">
+<meta property="og:title" content="MySql主从复制">
+<meta property="og:url" content="http://yoursite.com/2019/05/02/MySql主从复制/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:https://github.com/RediSearch/redisearch-py">
+<meta property="og:description" content="Mysql主从复制什么是主从复制？主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-28T09:01:58.149Z">
+<meta property="og:updated_time" content="2019-12-03T07:39:10.161Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用python3和高性能全文检索引擎Redisearch进行交互">
-<meta name="twitter:description" content="上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:https://github.com/RediSearch/redisearch-py">
+<meta name="twitter:title" content="MySql主从复制">
+<meta name="twitter:description" content="Mysql主从复制什么是主从复制？主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从">
 
-<link rel="canonical" href="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/">
+<link rel="canonical" href="http://yoursite.com/2019/05/02/MySql主从复制/">
 
 
 <script id="page-configurations">
@@ -77,7 +78,7 @@
   };
 </script>
 
-  <title>使用python3和高性能全文检索引擎Redisearch进行交互 | 湫</title>
+  <title>MySql主从复制 | 湫</title>
   
 
 
@@ -219,7 +220,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/02/MySql主从复制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/lufei.jpg">
@@ -232,7 +233,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用python3和高性能全文检索引擎Redisearch进行交互
+          MySql主从复制
         </h1>
 
         <div class="post-meta">
@@ -242,7 +243,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-06-07 00:00:00" itemprop="dateCreated datePublished" datetime="2019-06-07T00:00:00+08:00">2019-06-07</time>
+              <time title="创建时间：2019-05-02 18:26:32" itemprop="dateCreated datePublished" datetime="2019-05-02T18:26:32+08:00">2019-05-02</time>
             </span>
 
           
@@ -263,19 +264,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p> 上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:<a href="https://github.com/RediSearch/redisearch-py" target="_blank" rel="noopener">https://github.com/RediSearch/redisearch-py</a></p><a id="more"></a>
-<p>首先，安装</p>
-<p>pip3 install redisearch<br>    基本操作:</p>
-<p>from redisearch import Client, TextField</p>
-<h1 id="Creating-a-client-with-a-given-index-name"><a href="#Creating-a-client-with-a-given-index-name" class="headerlink" title="Creating a client with a given index name"></a>Creating a client with a given index name</h1><p>client = Client(‘myIndex’,host=’localhost’,port=’6666’)</p>
-<h1 id="Creating-the-index-definition-and-schema"><a href="#Creating-the-index-definition-and-schema" class="headerlink" title="Creating the index definition and schema"></a>Creating the index definition and schema</h1><p>client.create_index((TextField(‘title’), TextField(‘body’)))</p>
-<h1 id="Indexing-a-document"><a href="#Indexing-a-document" class="headerlink" title="Indexing a document"></a>Indexing a document</h1><p>client.add_document(‘doc2’, title = ‘你好’, body = ‘我在北京学习人工智能’,language=’chinese’)</p>
-<h1 id="Simple-search"><a href="#Simple-search" class="headerlink" title="Simple search"></a>Simple search</h1><p>res = client.search(“人工智能”)</p>
-<p>print(res.docs[0].title)<br>    可以看到，基本上和命令行中的操作方式没有太大区别，只是在search时不需要指定语言了，程序可以自主判断。</p>
-<pre><code>其实它的官方文档很简单，只是介绍了基本用法，但是你如果阅读了它的源码，发现一些常用操作它也进行了封装，比如</code></pre><p>#删除索引<br>client.drop_index()</p>
-<p>#获取当前索引的基本信息<br>client.info()</p>
-<p>#删除文档<br>client.delete_document(‘doc2’)</p>
-<pre><code>还是非常简单的，基本上，我们可以抛弃ES了，因为研发人员都是喜新厌旧的。</code></pre>
+        <p>Mysql主从复制<br>什么是主从复制？<br>主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从</p><a id="more"></a>
+<p>建立与某个业务数据库一样的数据库环境，即为主从复制</p>
+<p>一般情况下，主库用以写，而从库用以读</p>
+<p>为什么要搭建主从复制？<br>构建主从热备，当某天数据库宕机或或数据丢失情况，可以有备份数据库继续工作<br>降低IO频次，多库之间可以合理分配读写压力，提高单个数据库服务的数据库访问压力<br>隔离读写，在某些锁表情况下，可以使数据库读操作继续进行<br>主从复制原理<br>利用数据库bin-log二进制文件，该文件包含有数据库操作的所有SQL语句</p>
+<p>复制该文件至其余数据库服务中并执行即可</p>
+<p>主从复制过程</p>
+<p>当主库具有新数据时，主库会被从库请求，建立线程进行连接，用以传输binlog日志</p>
+<p>从库开启两个线程</p>
+<p>A线程：也叫做IO线程，连接主库，并请求binlog中的更新记录至从库中，写入至从库的relaylog文件中</p>
+<p>B线程：也叫做SQL线程，读取relaylog文件中的更新操作并执行</p>
+<p>如果，有多个从库同时存在，主库会为每个从库建立一个binlog输出线程</p>
+<p>主从复制原理自绘</p>
+<p>set global validate_password_policy=LOW;<br>set global validate_password_length=6;<br>环境<br>此处以一主一丛为例</p>
+<p>系统环境<br>主库（master）：192.168.1.100<br>从库（slave）：192.168.1.101<br>主库修改<br>主库配置修改<br>server-id = 1<br>log-bin=mysql-bin # 开启log bin<br>expire_logs_days=7 # 日志保存时间<br>server-id：</p>
+<p>同步数据中必须包含server-id，用于标识该语句最初是从哪个server写入</p>
+<p>每个slave端只能有一个线程在master端连接，如果两个salve端的server-id一致，一个连接成功之后，前一个连接将会被断开</p>
+<p>主主同步时，避免数据同步陷入死循环</p>
+<p>主库创建用户，用以从机连接获取binlog日志<br>grant replication slave on <em>.</em> to ‘master’@’%’ identified by ‘123456’;<br>flush privileges;<br>grant all privileges on <em>.</em> to master@’%’ identified by “123456”;<br>查看master状态<br>show master status;<br>记录上条命令返回的binlog文件名，Position属性，从机连接的时候要用<br>+——————+———-+————–+——————+——————-+<br>| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |<br>+——————+———-+————–+——————+——————-+<br>| mysql-bin.000001 |      154 |              |                  |                   |<br>+——————+———-+————–+——————+——————-+<br>1 row in set (0.00 sec)<br>从库修改<br>从库配置修改<br>server-id=11<br>master与slave端的server-id不能一样</p>
+<p>salve端无需开启log-bin功能</p>
+<p>从库指定master，执行如下<br>change master to master_host=’192.168.1.100’, master_port=3306, master_user=’master’, master_password=’123456’, master_log_file=’mysql-bin.000001’, master_log_pos=154;<br>启动从机<br>start slave;<br>同步特定的库<br>主机处配置<br>binlog-do-db=xxxx   # 二进制日志记录的数据库<br>binlog-ignore-db=xxxx # 二进制日志中忽略数据库<br>从机处配置<br>replicate-do-db    # 设定需要复制的数据库<br>replicate-ignore-db # 设定需要忽略的复制数据库<br>replicate-do-table  # 设定需要复制的表<br>replicate-ignore-table # 设定需要忽略的复制表<br>replicate-wild-do-table # 同replication-do-table功能一样，但是可以通配符<br>replicate-wild-ignore-table # 同replication-ignore-table功能一样，但是可以加通配符<br>常见错误<br>mysql-&gt;mariadb版本问题<br>Last_IO_Error: Got fatal error 1236 from master when reading data from binary log: ‘Client requested master to start replication from position &gt; file size’<br>从MySQL5.6开始引入了binlog_checksum全局变量，即MySQL会将event的CRC32校验值也写入binlog，显然MariaDB在分析日志的时候不会考虑该信息，导致解析出错</p>
+<p>show variables like ‘%binlog%’;<br>set global binlog_checksum=NONE;</p>
+
     </div>
 
     
@@ -290,7 +300,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/" title="使用python3和高性能全文检索引擎Redisearch进行交互">http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/</a>
+    <a href="http://yoursite.com/2019/05/02/MySql主从复制/" title="MySql主从复制">http://yoursite.com/2019/05/02/MySql主从复制/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -310,21 +320,24 @@
       </div>
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySql/" rel="tag"># MySql</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/05/02/MySql主从复制/" rel="next" title="MySql主从复制">
-                  <i class="fa fa-chevron-left"></i> MySql主从复制
+                <a href="/2017/11/11/装饰器/" rel="next" title="装饰器函数">
+                  <i class="fa fa-chevron-left"></i> 装饰器函数
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/" rel="prev" title="Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口">
-                  Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/" rel="prev" title="使用python3和高性能全文检索引擎Redisearch进行交互">
+                  使用python3和高性能全文检索引擎Redisearch进行交互 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -364,7 +377,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Creating-a-client-with-a-given-index-name"><span class="nav-text">Creating a client with a given index name</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Creating-the-index-definition-and-schema"><span class="nav-text">Creating the index definition and schema</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Indexing-a-document"><span class="nav-text">Indexing a document</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Simple-search"><span class="nav-text">Simple search</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -51,19 +51,18 @@
   };
 </script>
 
-  <meta name="description" content="上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:https://github.com/RediSearch/redisearch-py">
-<meta property="og:type" content="article">
-<meta property="og:title" content="使用python3和高性能全文检索引擎Redisearch进行交互">
-<meta property="og:url" content="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/index.html">
+  <meta name="description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
+<meta property="og:type" content="website">
+<meta property="og:title" content="湫">
+<meta property="og:url" content="http://yoursite.com/archives/2019/05/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:https://github.com/RediSearch/redisearch-py">
+<meta property="og:description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-28T09:01:58.149Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用python3和高性能全文检索引擎Redisearch进行交互">
-<meta name="twitter:description" content="上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:https://github.com/RediSearch/redisearch-py">
+<meta name="twitter:title" content="湫">
+<meta name="twitter:description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
 
-<link rel="canonical" href="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/">
+<link rel="canonical" href="http://yoursite.com/archives/2019/05/">
 
 
 <script id="page-configurations">
@@ -71,13 +70,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true,
+    isPost: false,
     isPage: false,
-    isArchive: false
+    isArchive: true
   };
 </script>
 
-  <title>使用python3和高性能全文检索引擎Redisearch进行交互 | 湫</title>
+  <title>归档 | 湫</title>
   
 
 
@@ -214,128 +213,49 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/lufei.jpg">
-      <meta itemprop="name" content="SWS">
-      <meta itemprop="description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="湫">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          使用python3和高性能全文检索引擎Redisearch进行交互
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-06-07 00:00:00" itemprop="dateCreated datePublished" datetime="2019-06-07T00:00:00+08:00">2019-06-07</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p> 上一篇介绍了一款高性能全文检索引擎Redisearch，它不仅性能强劲，部署也方便，这里介绍一下如何用python客户端和它进行交互。使用redisearch-python:<a href="https://github.com/RediSearch/redisearch-py" target="_blank" rel="noopener">https://github.com/RediSearch/redisearch-py</a></p><a id="more"></a>
-<p>首先，安装</p>
-<p>pip3 install redisearch<br>    基本操作:</p>
-<p>from redisearch import Client, TextField</p>
-<h1 id="Creating-a-client-with-a-given-index-name"><a href="#Creating-a-client-with-a-given-index-name" class="headerlink" title="Creating a client with a given index name"></a>Creating a client with a given index name</h1><p>client = Client(‘myIndex’,host=’localhost’,port=’6666’)</p>
-<h1 id="Creating-the-index-definition-and-schema"><a href="#Creating-the-index-definition-and-schema" class="headerlink" title="Creating the index definition and schema"></a>Creating the index definition and schema</h1><p>client.create_index((TextField(‘title’), TextField(‘body’)))</p>
-<h1 id="Indexing-a-document"><a href="#Indexing-a-document" class="headerlink" title="Indexing a document"></a>Indexing a document</h1><p>client.add_document(‘doc2’, title = ‘你好’, body = ‘我在北京学习人工智能’,language=’chinese’)</p>
-<h1 id="Simple-search"><a href="#Simple-search" class="headerlink" title="Simple search"></a>Simple search</h1><p>res = client.search(“人工智能”)</p>
-<p>print(res.docs[0].title)<br>    可以看到，基本上和命令行中的操作方式没有太大区别，只是在search时不需要指定语言了，程序可以自主判断。</p>
-<pre><code>其实它的官方文档很简单，只是介绍了基本用法，但是你如果阅读了它的源码，发现一些常用操作它也进行了封装，比如</code></pre><p>#删除索引<br>client.drop_index()</p>
-<p>#获取当前索引的基本信息<br>client.info()</p>
-<p>#删除文档<br>client.delete_document(‘doc2’)</p>
-<pre><code>还是非常简单的，基本上，我们可以抛弃ES了，因为研发人员都是喜新厌旧的。</code></pre>
-    </div>
-
-    
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>SWS
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/" title="使用python3和高性能全文检索引擎Redisearch进行交互">http://yoursite.com/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <div>
-        
-          <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
-    
-</div>
-        
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <span class="collection-header">嗯..! 目前共计 8 篇日志。 继续努力。</span>
       </div>
 
-      <footer class="post-footer">
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2019</h1>
+    </div>
 
-        
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-                <a href="/2019/05/02/MySql主从复制/" rel="next" title="MySql主从复制">
-                  <i class="fa fa-chevron-left"></i> MySql主从复制
-                </a>
-            </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-05-02T18:26:32+08:00"
+              content="2019-05-02">
+          05-02
+        </time>
+      </div>
 
-            <span class="post-nav-divider"></span>
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/05/02/MySql主从复制/" itemprop="url">
+            <span itemprop="name">MySql主从复制</span>
+          </a>
+      </h2>
 
-            <div class="post-nav-prev post-nav-item">
-                <a href="/2019/07/02/Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口/" rel="prev" title="Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口">
-                  Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-      </footer>
-    
+    </header>
   </article>
+
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+
 
 
           </div>
@@ -364,7 +284,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Creating-a-client-with-a-given-index-name"><span class="nav-text">Creating a client with a given index name</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Creating-the-index-definition-and-schema"><span class="nav-text">Creating the index definition and schema</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Indexing-a-document"><span class="nav-text">Indexing a document</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Simple-search"><span class="nav-text">Simple search</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

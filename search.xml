@@ -236,6 +236,35 @@ else:
 <pre><code>还是非常简单的，基本上，我们可以抛弃ES了，因为研发人员都是喜新厌旧的。</code></pre>]]></content>
   </entry>
   <entry>
+    <title>MySql主从复制</title>
+    <url>/2019/05/02/MySql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
+    <content><![CDATA[<p>Mysql主从复制<br>什么是主从复制？<br>主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从</p><a id="more"></a>
+<p>建立与某个业务数据库一样的数据库环境，即为主从复制</p>
+<p>一般情况下，主库用以写，而从库用以读</p>
+<p>为什么要搭建主从复制？<br>构建主从热备，当某天数据库宕机或或数据丢失情况，可以有备份数据库继续工作<br>降低IO频次，多库之间可以合理分配读写压力，提高单个数据库服务的数据库访问压力<br>隔离读写，在某些锁表情况下，可以使数据库读操作继续进行<br>主从复制原理<br>利用数据库bin-log二进制文件，该文件包含有数据库操作的所有SQL语句</p>
+<p>复制该文件至其余数据库服务中并执行即可</p>
+<p>主从复制过程</p>
+<p>当主库具有新数据时，主库会被从库请求，建立线程进行连接，用以传输binlog日志</p>
+<p>从库开启两个线程</p>
+<p>A线程：也叫做IO线程，连接主库，并请求binlog中的更新记录至从库中，写入至从库的relaylog文件中</p>
+<p>B线程：也叫做SQL线程，读取relaylog文件中的更新操作并执行</p>
+<p>如果，有多个从库同时存在，主库会为每个从库建立一个binlog输出线程</p>
+<p>主从复制原理自绘</p>
+<p>set global validate_password_policy=LOW;<br>set global validate_password_length=6;<br>环境<br>此处以一主一丛为例</p>
+<p>系统环境<br>主库（master）：192.168.1.100<br>从库（slave）：192.168.1.101<br>主库修改<br>主库配置修改<br>server-id = 1<br>log-bin=mysql-bin # 开启log bin<br>expire_logs_days=7 # 日志保存时间<br>server-id：</p>
+<p>同步数据中必须包含server-id，用于标识该语句最初是从哪个server写入</p>
+<p>每个slave端只能有一个线程在master端连接，如果两个salve端的server-id一致，一个连接成功之后，前一个连接将会被断开</p>
+<p>主主同步时，避免数据同步陷入死循环</p>
+<p>主库创建用户，用以从机连接获取binlog日志<br>grant replication slave on <em>.</em> to ‘master’@’%’ identified by ‘123456’;<br>flush privileges;<br>grant all privileges on <em>.</em> to master@’%’ identified by “123456”;<br>查看master状态<br>show master status;<br>记录上条命令返回的binlog文件名，Position属性，从机连接的时候要用<br>+——————+———-+————–+——————+——————-+<br>| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |<br>+——————+———-+————–+——————+——————-+<br>| mysql-bin.000001 |      154 |              |                  |                   |<br>+——————+———-+————–+——————+——————-+<br>1 row in set (0.00 sec)<br>从库修改<br>从库配置修改<br>server-id=11<br>master与slave端的server-id不能一样</p>
+<p>salve端无需开启log-bin功能</p>
+<p>从库指定master，执行如下<br>change master to master_host=’192.168.1.100’, master_port=3306, master_user=’master’, master_password=’123456’, master_log_file=’mysql-bin.000001’, master_log_pos=154;<br>启动从机<br>start slave;<br>同步特定的库<br>主机处配置<br>binlog-do-db=xxxx   # 二进制日志记录的数据库<br>binlog-ignore-db=xxxx # 二进制日志中忽略数据库<br>从机处配置<br>replicate-do-db    # 设定需要复制的数据库<br>replicate-ignore-db # 设定需要忽略的复制数据库<br>replicate-do-table  # 设定需要复制的表<br>replicate-ignore-table # 设定需要忽略的复制表<br>replicate-wild-do-table # 同replication-do-table功能一样，但是可以通配符<br>replicate-wild-ignore-table # 同replication-ignore-table功能一样，但是可以加通配符<br>常见错误<br>mysql-&gt;mariadb版本问题<br>Last_IO_Error: Got fatal error 1236 from master when reading data from binary log: ‘Client requested master to start replication from position &gt; file size’<br>从MySQL5.6开始引入了binlog_checksum全局变量，即MySQL会将event的CRC32校验值也写入binlog，显然MariaDB在分析日志的时候不会考虑该信息，导致解析出错</p>
+<p>show variables like ‘%binlog%’;<br>set global binlog_checksum=NONE;</p>
+]]></content>
+      <tags>
+        <tag>MySql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>装饰器函数</title>
     <url>/2017/11/11/%E8%A3%85%E9%A5%B0%E5%99%A8/</url>
     <content><![CDATA[<p>装饰器函数<br>装饰器：在函数运行时增加功能且不影响这个函数原有内容</p><a id="more"></a>
