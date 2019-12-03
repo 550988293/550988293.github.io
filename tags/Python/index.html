@@ -51,20 +51,18 @@
   };
 </script>
 
-  <meta name="description" content="Mysql主从复制什么是主从复制？主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从">
-<meta name="keywords" content="MySql">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MySql主从复制">
-<meta property="og:url" content="http://yoursite.com/2019/05/02/MySql主从复制/index.html">
+  <meta name="description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
+<meta property="og:type" content="website">
+<meta property="og:title" content="湫">
+<meta property="og:url" content="http://yoursite.com/tags/Python/index.html">
 <meta property="og:site_name" content="湫">
-<meta property="og:description" content="Mysql主从复制什么是主从复制？主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从">
+<meta property="og:description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-03T07:39:10.161Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySql主从复制">
-<meta name="twitter:description" content="Mysql主从复制什么是主从复制？主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从">
+<meta name="twitter:title" content="湫">
+<meta name="twitter:description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
 
-<link rel="canonical" href="http://yoursite.com/2019/05/02/MySql主从复制/">
+<link rel="canonical" href="http://yoursite.com/tags/Python/">
 
 
 <script id="page-configurations">
@@ -72,13 +70,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true,
+    isPost: false,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>MySql主从复制 | 湫</title>
+  <title>标签: Python | 湫</title>
   
 
 
@@ -156,12 +154,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">1</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">5</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">8</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">7</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -215,140 +213,70 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/02/MySql主从复制/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/lufei.jpg">
-      <meta itemprop="name" content="SWS">
-      <meta itemprop="description" content="即使你我之间人山人海，即使你我之间天南海北，此时此刻，我就在你面前">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="湫">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          MySql主从复制
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h1 class="collection-header">Python
+          <small>标签</small>
         </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-02 18:26:32" itemprop="dateCreated datePublished" datetime="2019-05-02T18:26:32+08:00">2019-05-02</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>Mysql主从复制<br>什么是主从复制？<br>主从复制至少需要两台服务器，或两个mysql服务，可以配置一主多从，多主多从</p><a id="more"></a>
-<p>建立与某个业务数据库一样的数据库环境，即为主从复制</p>
-<p>一般情况下，主库用以写，而从库用以读</p>
-<p>为什么要搭建主从复制？<br>构建主从热备，当某天数据库宕机或或数据丢失情况，可以有备份数据库继续工作<br>降低IO频次，多库之间可以合理分配读写压力，提高单个数据库服务的数据库访问压力<br>隔离读写，在某些锁表情况下，可以使数据库读操作继续进行<br>主从复制原理<br>利用数据库bin-log二进制文件，该文件包含有数据库操作的所有SQL语句</p>
-<p>复制该文件至其余数据库服务中并执行即可</p>
-<p>主从复制过程</p>
-<p>当主库具有新数据时，主库会被从库请求，建立线程进行连接，用以传输binlog日志</p>
-<p>从库开启两个线程</p>
-<p>A线程：也叫做IO线程，连接主库，并请求binlog中的更新记录至从库中，写入至从库的relaylog文件中</p>
-<p>B线程：也叫做SQL线程，读取relaylog文件中的更新操作并执行</p>
-<p>如果，有多个从库同时存在，主库会为每个从库建立一个binlog输出线程</p>
-<p>主从复制原理自绘</p>
-<p>set global validate_password_policy=LOW;<br>set global validate_password_length=6;<br>环境<br>此处以一主一丛为例</p>
-<p>系统环境<br>主库（master）：192.168.1.100<br>从库（slave）：192.168.1.101<br>主库修改<br>主库配置修改<br>server-id = 1<br>log-bin=mysql-bin # 开启log bin<br>expire_logs_days=7 # 日志保存时间<br>server-id：</p>
-<p>同步数据中必须包含server-id，用于标识该语句最初是从哪个server写入</p>
-<p>每个slave端只能有一个线程在master端连接，如果两个salve端的server-id一致，一个连接成功之后，前一个连接将会被断开</p>
-<p>主主同步时，避免数据同步陷入死循环</p>
-<p>主库创建用户，用以从机连接获取binlog日志<br>grant replication slave on <em>.</em> to ‘master’@’%’ identified by ‘123456’;<br>flush privileges;<br>grant all privileges on <em>.</em> to master@’%’ identified by “123456”;<br>查看master状态<br>show master status;<br>记录上条命令返回的binlog文件名，Position属性，从机连接的时候要用<br>+——————+———-+————–+——————+——————-+<br>| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |<br>+——————+———-+————–+——————+——————-+<br>| mysql-bin.000001 |      154 |              |                  |                   |<br>+——————+———-+————–+——————+——————-+<br>1 row in set (0.00 sec)<br>从库修改<br>从库配置修改<br>server-id=11<br>master与slave端的server-id不能一样</p>
-<p>salve端无需开启log-bin功能</p>
-<p>从库指定master，执行如下<br>change master to master_host=’192.168.1.100’, master_port=3306, master_user=’master’, master_password=’123456’, master_log_file=’mysql-bin.000001’, master_log_pos=154;<br>启动从机<br>start slave;<br>同步特定的库<br>主机处配置<br>binlog-do-db=xxxx   # 二进制日志记录的数据库<br>binlog-ignore-db=xxxx # 二进制日志中忽略数据库<br>从机处配置<br>replicate-do-db    # 设定需要复制的数据库<br>replicate-ignore-db # 设定需要忽略的复制数据库<br>replicate-do-table  # 设定需要复制的表<br>replicate-ignore-table # 设定需要忽略的复制表<br>replicate-wild-do-table # 同replication-do-table功能一样，但是可以通配符<br>replicate-wild-ignore-table # 同replication-ignore-table功能一样，但是可以加通配符<br>常见错误<br>mysql-&gt;mariadb版本问题<br>Last_IO_Error: Got fatal error 1236 from master when reading data from binary log: ‘Client requested master to start replication from position &gt; file size’<br>从MySQL5.6开始引入了binlog_checksum全局变量，即MySQL会将event的CRC32校验值也写入binlog，显然MariaDB在分析日志的时候不会考虑该信息，导致解析出错</p>
-<p>show variables like ‘%binlog%’;<br>set global binlog_checksum=NONE;</p>
-
-    </div>
-
-    
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>SWS
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2019/05/02/MySql主从复制/" title="MySql主从复制">http://yoursite.com/2019/05/02/MySql主从复制/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <div>
-        
-          <div>
-    
-        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
-    
-</div>
-        
       </div>
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/MySql/" rel="tag"># MySql</a>
-          </div>
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2017</h1>
+    </div>
 
-        
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-                <a href="/2017/11/11/装饰器/" rel="next" title="装饰器函数">
-                  <i class="fa fa-chevron-left"></i> 装饰器函数
-                </a>
-            </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2017-11-11T00:00:00+08:00"
+              content="2017-11-11">
+          11-11
+        </time>
+      </div>
 
-            <span class="post-nav-divider"></span>
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2017/11/11/装饰器/" itemprop="url">
+            <span itemprop="name">装饰器函数</span>
+          </a>
+      </h2>
 
-            <div class="post-nav-prev post-nav-item">
-                <a href="/2019/06/07/使用python3和高性能全文检索引擎Redisearch进行交互/" rel="prev" title="使用python3和高性能全文检索引擎Redisearch进行交互">
-                  使用python3和高性能全文检索引擎Redisearch进行交互 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
-      </footer>
-    
+    </header>
   </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2017-10-11T00:00:00+08:00"
+              content="2017-10-11">
+          10-11
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2017/10/11/正则/" itemprop="url">
+            <span itemprop="name">正则表达式</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+
 
 
           </div>
@@ -392,14 +320,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
