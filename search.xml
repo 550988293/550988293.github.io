@@ -1,6 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title></title>
+    <url>/2020/01/09/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/</url>
+    <content><![CDATA[<p>title: Mysql事务特性及隔离级别<br>date: 2019-09-09<br>tags: mysql<br>categories: mysql</p><a id="more"></a>
+<h3 id="1-1-2、事务的特性"><a href="#1-1-2、事务的特性" class="headerlink" title="1.1.2、事务的特性"></a>1.1.2、事务的特性</h3><ol>
+<li><p>原子性</p>
+<blockquote>
+<p>事务中的全部操作在数据库中是不可分割的，要么全部完成，要么全都不完成</p>
+</blockquote>
+</li>
+<li><p>一致性</p>
+<blockquote>
+<p>几个并行执行的事务，其执行结果必须与按某一顺序串行执行的结果相一致</p>
+</blockquote>
+</li>
+<li><p>隔离性</p>
+<blockquote>
+<p>事务的执行不受其他事务的干扰，事务执行的中间结果对其他事务必须是透明的</p>
+</blockquote>
+</li>
+<li><p>持久性</p>
+<blockquote>
+<p>一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="https://pic2.zhimg.com/80/v2-59ea2f0769e4e9ffbcdce938d306fae9_hd.png" alt="img"> </p>
+<h3 id="1-1-3、事务隔离级别"><a href="#1-1-3、事务隔离级别" class="headerlink" title="1.1.3、事务隔离级别"></a>1.1.3、事务隔离级别</h3><ol>
+<li><p><strong>未提交读：脏读（READ UNCOMMITTED）</strong></p>
+<ol>
+<li>事务2查询到的数据是事务1中修改但未提交的数据，但因为事务1回滚了数据</li>
+<li>所以事务2查询的数据是不正确的，因此出现了脏读的问题</li>
+</ol>
+</li>
+</ol>
+<h3 id="READ-UNCOMMITTED（读未提交）"><a href="#READ-UNCOMMITTED（读未提交）" class="headerlink" title="READ UNCOMMITTED（读未提交）"></a>READ UNCOMMITTED（读未提交）</h3><p> 该隔离级别的事务会读到其它未提交事务的数据，此现象也称之为<strong>脏读</strong>。 </p>
+<p> 两个命令行客户端分别为A，B；不断改变A的隔离级别，在B端修改数据。 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">将A的隔离级别设置为read uncommitted(未提交读)</span><br><span class="line">A：SET @@session.transaction_isolation = &apos;READ-UNCOMMITTED&apos;;</span><br><span class="line">创建一张test</span><br><span class="line">create database test;</span><br><span class="line"></span><br><span class="line">use test;</span><br><span class="line"></span><br><span class="line">create table test(id int primary key);</span><br><span class="line"></span><br><span class="line">insert into test(id) values(1);</span><br><span class="line"></span><br><span class="line">A：启动事务，此时数据为初始状态</span><br><span class="line">start transaction;</span><br><span class="line"></span><br><span class="line">B：启动事务，更新数据，但不提交</span><br><span class="line">start transaction;</span><br><span class="line">update test set id = 2 where id = 1;</span><br><span class="line"></span><br><span class="line">A：再次读取数据，发现数据已经被修改了，这就是所谓的“脏读</span><br><span class="line">select * from test;</span><br><span class="line"></span><br><span class="line">B:回滚事务</span><br><span class="line">rollback;</span><br><span class="line"></span><br><span class="line">A:再次读数据，发现数据变回初始状态</span><br><span class="line">select * from test;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><strong>提交读：不可重复读（READ COMMITTED）</strong></p>
+<p>注：一个事务从开始到提交之前对数据所做的改变对其他事务是不可见的，这样就解决在READ-UNCOMMITTED级别下的脏读问题。</p>
+<ol>
+<li>事务2执行update语句但未提交前，事务1的前两个select操作返回结果是相同的</li>
+<li>但事务2执行commit操作后，事务1的第三个select操作就读取到事务2对数据的改变</li>
+<li>导致与前两次select操作返回不同的数据，因此出现了不可重复读的问题</li>
+</ol>
+</li>
+</ol>
+<h3 id="READ-COMMITTED（提交读）"><a href="#READ-COMMITTED（提交读）" class="headerlink" title="READ COMMITTED（提交读）"></a>READ COMMITTED（提交读）</h3><p> 一个事务可以读取另一个已提交的事务，多次读取会造成不一样的结果，此现象称为不可重复读问题，Oracle 和 SQL Server 的默认隔离级别。 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A:将客户端A的事务隔离级别设置为read committed(已提交读)</span><br><span class="line"></span><br><span class="line">SET @@session.transaction_isolation = &apos;READ-COMMITTED&apos;;</span><br><span class="line">创建test表</span><br><span class="line">create database test;</span><br><span class="line">use test;</span><br><span class="line">create table test(id int primary key);</span><br><span class="line">insert into test(id) values(1);</span><br><span class="line"></span><br><span class="line">A：启动事务，此时数据为初始状态</span><br><span class="line">start transaction;</span><br><span class="line"></span><br><span class="line">B：启动事务，更新数据，但不提交</span><br><span class="line">start transaction;</span><br><span class="line">update test set id = 2 where id = 1;</span><br><span class="line"></span><br><span class="line">A：再次读数据，发现数据未被修改</span><br><span class="line">select * from test;</span><br><span class="line"></span><br><span class="line">B：提交事务</span><br><span class="line">commit;</span><br><span class="line"></span><br><span class="line">A：再次读取数据，发现数据已发生变化，说明B提交的修改被事务中的A读到了，这就是所谓的“不可重复读”</span><br><span class="line">select * from test;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>可重复读：幻读（REPEATABLE READ）：这是MySQL的默认事务隔离级别</strong><ol>
+<li>事务每开启一个实例，都会分配一个版本号给它，如果读取的数据行正在被其他事务执行DELETE或UPDATE操作（既该行上有排他锁）</li>
+<li>这时该事务的读取操作不会等待行上的锁释放，而是根据版本号去读取行的快照数据（记录在undo log中）</li>
+<li>这样，事务中的查询操作返回的都是同一版本下的数据，解决了不可重复读问题。</li>
+<li>虽然该隔离级别下解决了不可重复读问题，但理论上会导致另一个问题：幻读（Phantom Read）。</li>
+<li>一个事务在执行过程中，另一个事务对已有数据行的更改，MVCC机制可保障该事务读取到的原有数据行的内容相同</li>
+<li>但并不能阻止另一个事务插入新的数据行，这就会导致该事务中凭空多出数据行，像出现了幻读一样，这便是幻读问题</li>
+</ol>
+</li>
+</ol>
+<h3 id="REPEATABLE-READ（可重复读）"><a href="#REPEATABLE-READ（可重复读）" class="headerlink" title="REPEATABLE READ（可重复读）"></a>REPEATABLE READ（可重复读）</h3><p> 该隔离级别是 MySQL 默认的隔离级别，在同一个事务里，<code>select</code> 的结果是事务开始时时间点的状态，因此，同样的 <code>select</code> 操作读到的结果会是一致的，但是，会有<strong>幻读</strong>现象 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">将A的隔离级别设置为repeatable read(可重复读)</span><br><span class="line">SET @@session.transaction_isolation = &apos;REPEATABLE-READ&apos;;</span><br><span class="line">create database test;</span><br><span class="line">use test;</span><br><span class="line">create table test(id int primary key,name varchar(20));</span><br><span class="line"></span><br><span class="line">A：登录 mysql 终端 A，开启一个事务。</span><br><span class="line">start transaction;</span><br><span class="line">select * from test; -- 无记录</span><br><span class="line"></span><br><span class="line">B：登录 mysql 终端 B，开启一个事务。</span><br><span class="line">use test;</span><br><span class="line">start transaction;</span><br><span class="line">select * from test; -- 无记录</span><br><span class="line"></span><br><span class="line">A:切换到 mysql 终端 A，增加一条记录并提交。</span><br><span class="line">insert into test(id,name) values(1,&apos;a&apos;);</span><br><span class="line">commit;</span><br><span class="line">select * from test; --可以看到已经更改</span><br><span class="line"></span><br><span class="line">B:切换到 msyql 终端 B。</span><br><span class="line">select * from test; --此时查询还是无记录</span><br><span class="line"></span><br><span class="line">通过这一步可以证明，在该隔离级别下已经读取不到别的已提交的事务，如果想看到 mysql 终端 1 提交的事务，在 mysql 终端 2 将当前事务提交后再次查询就可以读取到 mysql 终端 1 提交的事务。</span><br><span class="line"> 可重复读隔离级别只允许读取已提交记录，而且在一个事务两次读取一个记录期间，其他事务部的更新该记录。 </span><br><span class="line"></span><br><span class="line">B：此时接着在 mysql 终端 B 插入一条数据。</span><br><span class="line">insert into test(id,name) values(1,&apos;b&apos;); -- 此时报主键冲突的错误</span><br><span class="line">这就是该隔离级别下可能产生的问题，MySQL 称之为幻读。</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p><strong>可串行读（SERIALIZABLE）</strong></p>
+<ol>
+<li>这是事务的最高隔离级别，通过强制事务排序，使之不可能相互冲突，就像在每个读的数据行加上共享锁来实现</li>
+<li>在该隔离级别下，可以解决前面出现的脏读、不可重复读和幻读问题，但也会导致大量的超时和锁竞争现象，一般不推荐使用</li>
+</ol>
+</li>
+</ol>
+<h3 id="SERIALIZABLE（可串行读）"><a href="#SERIALIZABLE（可串行读）" class="headerlink" title="SERIALIZABLE（可串行读）"></a>SERIALIZABLE（可串行读）</h3><p> 在该隔离级别下事务都是串行顺序执行的，MySQL 数据库的 InnoDB 引擎会给读操作隐式加一把读共享锁，从而避免了脏读、不可重读复读和幻读问题。 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A:准备两个终端，在此命名为 mysql 终端 A 和 mysql 终端 B，分别登入 mysql，准备一张测试表 test 并调整隔离级别为 SERIALIZABLE，任意一个终端执行即可。</span><br><span class="line">set session transaction isolation level serializable;</span><br><span class="line">create database test;</span><br><span class="line">use test;</span><br><span class="line">create table test(id int primary key);</span><br><span class="line">insert into test(id) values(1);</span><br><span class="line"></span><br><span class="line">A:登录 mysql 终端 A，开启一个事务，并写入一条数据。</span><br><span class="line">start transaction;</span><br><span class="line">select * from test;</span><br><span class="line"></span><br><span class="line">B:登录 mysql 终端 B，开启一个事务。</span><br><span class="line">start transaction;</span><br><span class="line">select * from test; </span><br><span class="line"> delete from test;</span><br><span class="line"></span><br><span class="line">A:立马切换到 mysql 终端 A,提交事务。</span><br><span class="line">commit;</span><br><span class="line"></span><br><span class="line">一旦事务提交，msyql 终端 B 会立马返回 ID 为 1 的记录，否则会一直卡住，直到超时，其中超时参数是由 innodb_lock_wait_timeout 控制</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2020/01/09/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
+    <content><![CDATA[<p>title: Mysql主从复制<br>date: 2019-09-09<br>tags: mysql<br>categories: mysql</p><a id="more"></a>
+<h1 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. 关闭正在运行的MySQL服务</span><br><span class="line">2. 打开DOS窗口，转到mysql\bin目录</span><br><span class="line">3. 输入mysqld --skip-grant-tables 回车       --skip-grant-tables 的意思是启动MySQL服务的时候跳过权限表认证</span><br><span class="line">4. 再开一个DOS窗口（因为刚才那个DOS窗口已经不能动了），转到mysql\bin目录 </span><br><span class="line">5. 输入mysql回车，如果成功，将出现MySQL提示符 &gt;</span><br><span class="line">6. 连接权限数据库： use mysql;</span><br><span class="line">6. 改密码：update user set password=password(&quot;root&quot;) where user=&quot;root&quot;; </span><br><span class="line">   mysql5.7以上版本--&gt;    UPDATE user SET authentication_string=PASSWORD(&quot;root&quot;) WHERE User=&quot;root&quot;;</span><br><span class="line">7. 刷新权限（必须步骤）：flush privileges;　</span><br><span class="line">8. 退出 quit。 </span><br><span class="line">9. 注销系统，再进入，使用用户名root和刚才设置的新密码123登录。</span><br></pre></td></tr></table></figure>
+
+<h1 id="Centos7"><a href="#Centos7" class="headerlink" title="Centos7"></a>Centos7</h1><p>1.修改MySQL的配置文件（默认为/etc/my.cnf）,在[mysqld]下添加一行skip-grant-tables </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">skip-grant-tables</span><br></pre></td></tr></table></figure>
+
+<p>2.保存配置文件后，重启MySQL服务 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service mysqld restart（注：根据自己的情况重启mysql )</span><br><span class="line"></span><br><span class="line">error:Redirecting to /bin/systemctl restart  mysqld.service</span><br><span class="line">service mysqld status</span><br><span class="line"></span><br><span class="line">error:Failed to restart mysqld.drtvice.service: Unit not found.</span><br><span class="line">请重装</span><br></pre></td></tr></table></figure>
+
+<p>3.再次进入MySQL命令行 mysql -uroot -p,输入密码时直接回车，就会进入MySQL数据库了，这个时候按照常规流程修改root密码即可。 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;use mysql;    更改数据库</span><br><span class="line"></span><br><span class="line">&gt;UPDATE user SET PASSORD =password(&quot;自己重新设置的密码写此处&quot;) WHERE USER= &apos;root&apos;;  重设密码</span><br></pre></td></tr></table></figure>
+
+<p>4.如果是 centos 7以上的；可能会失败；修改密码操作改为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update mysql.user set authentication_string=password(&apos;自己重新设置的密码写此处&apos;) where user=&apos;root&apos; ;</span><br></pre></td></tr></table></figure>
+
+<p>5.刷新MySQL的系统权限相关表，以防止更改后拒绝访问；或者重启MySQL服务器 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<p>6.密码修改完毕后，再按照步骤1中的流程，删掉配置文件中的那行，并且重启MySQL服务，新密码就生效了。 </p>
+<h5 id="后续解密"><a href="#后续解密" class="headerlink" title="后续解密"></a>后续解密</h5><p>ERROR 1820 (HY000): Unknown error 1820</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SET PASSWORD = PASSWORD(&apos;新密码&apos;);</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
     <title>vue定时器实时更新数据</title>
     <url>/2019/08/07/%E5%AE%9A%E6%97%B6%E5%99%A8%E5%AE%9E%E6%97%B6%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<p>##Vue中使用计时器实时刷新页面数据</p><p>###需求说明</p><p>在前端开发中，往往会遇到页面需要实时刷新数据的情况，给用户最新的数据展示。</p><a id="more"></a>
@@ -274,6 +380,269 @@ else:
       </categories>
       <tags>
         <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mysql索引类型及创建索引</title>
+    <url>/2018/08/08/mysql%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<h4 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h4><h6 id="什么是索引？"><a href="#什么是索引？" class="headerlink" title="什么是索引？"></a>什么是索引？</h6><p>​        MySQL官方对索引的定义为：索引(Index)是帮助MySQL高效获取数据的数据结构。我们可以简单理解为：快速查找排好序的一种数据结构。Mysql索引主要有两种结构：B+Tree索引和Hash索引。我们平常所说的索引，如果没有特别指明，一般都是指B树结构组织的索引(B+Tree索引)。索引如图所示：</p><a id="more"></a>
+<p><img src="mysql%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95/B%E6%A0%91%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt="B树"></p>
+<p>​        索引类似一本书的目录，可以提高数据检索的效率，降低数据库的IO成本。MySQL在300万条记录左右性能开始逐渐下降，虽然官方文档说500~800w记录，所以大数据量建立索引是非常有必要的。MySQL提供了Explain，用于显示SQL执行的详细信息，可以进行索引的优化。 </p>
+<p>MySQL目前主要有以下几种索引类型：</p>
+<p>1.<strong>普通索引</strong></p>
+<p>2.<strong>唯一索引</strong></p>
+<p>3.<strong>主键索引</strong></p>
+<p>4.<strong>联合索引</strong></p>
+<p>5.<strong>联合唯一索引</strong></p>
+<p>6.<strong>全文索引</strong></p>
+<h4 id="二、语法"><a href="#二、语法" class="headerlink" title="二、语法"></a>二、语法</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE table_name[col_name]</span><br><span class="line">[unique|fulltext] [index|key] [index_name] (col_name[length])[asc|desc]</span><br><span class="line"></span><br><span class="line"># 或者</span><br><span class="line">CREATE TABLE [unique|fulltext] [index|key] [index_name] on table_name[col_name[length]] [asc|desc]</span><br></pre></td></tr></table></figure>
+
+<h6 id="1-unique-fulltext为可选参数，分别表示唯一索引、全文索引"><a href="#1-unique-fulltext为可选参数，分别表示唯一索引、全文索引" class="headerlink" title="1.unique|fulltext为可选参数，分别表示唯一索引、全文索引"></a>1.unique|fulltext为可选参数，分别表示唯一索引、全文索引</h6><h6 id="2-index和key为同义词，两者作用相同，用来指定创建索引"><a href="#2-index和key为同义词，两者作用相同，用来指定创建索引" class="headerlink" title="2.index和key为同义词，两者作用相同，用来指定创建索引"></a>2.index和key为同义词，两者作用相同，用来指定创建索引</h6><h6 id="3-col-name为需要创建索引的字段列，该列必须从数据表中该定义的多个列中选择"><a href="#3-col-name为需要创建索引的字段列，该列必须从数据表中该定义的多个列中选择" class="headerlink" title="3.col_name为需要创建索引的字段列，该列必须从数据表中该定义的多个列中选择"></a>3.col_name为需要创建索引的字段列，该列必须从数据表中该定义的多个列中选择</h6><h6 id="4-index-name指定索引的名称，为可选参数，如果不指定，默认col-name为索引值"><a href="#4-index-name指定索引的名称，为可选参数，如果不指定，默认col-name为索引值" class="headerlink" title="4.index_name指定索引的名称，为可选参数，如果不指定，默认col_name为索引值"></a>4.index_name指定索引的名称，为可选参数，如果不指定，默认col_name为索引值</h6><h6 id="5-length为可选参数，表示索引的长度，只有字符串类型的字段才能指定索引长度"><a href="#5-length为可选参数，表示索引的长度，只有字符串类型的字段才能指定索引长度" class="headerlink" title="5.length为可选参数，表示索引的长度，只有字符串类型的字段才能指定索引长度"></a>5.length为可选参数，表示索引的长度，只有字符串类型的字段才能指定索引长度</h6><h6 id="6-asc或desc指定升序或降序的索引值存储"><a href="#6-asc或desc指定升序或降序的索引值存储" class="headerlink" title="6.asc或desc指定升序或降序的索引值存储"></a>6.asc或desc指定升序或降序的索引值存储</h6><blockquote>
+<h4 id="注意：create-语法不能创建主键索引-只有alter语法可以！"><a href="#注意：create-语法不能创建主键索引-只有alter语法可以！" class="headerlink" title="注意：create 语法不能创建主键索引,只有alter语法可以！"></a>注意：create 语法不能创建主键索引,只有alter语法可以！</h4></blockquote>
+<h4 id="三、索引类型"><a href="#三、索引类型" class="headerlink" title="三、索引类型"></a>三、索引类型</h4><h6 id="1-普通索引"><a href="#1-普通索引" class="headerlink" title="1.普通索引"></a>1.普通索引</h6><p>是最基本的索引，它没有任何限制。它有以下几种创建方式：<br>（1）直接创建索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE INDEX index_name ON table(column(length))</span><br></pre></td></tr></table></figure>
+
+<p>（2）修改表结构的方式添加索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALTER TABLE table_name ADD INDEX index_name ON (column(length))</span><br></pre></td></tr></table></figure>
+
+<p>（3）创建表的时候同时创建索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `table` (</span><br><span class="line">    `id` int(11) NOT NULL AUTO_INCREMENT ,</span><br><span class="line">    `title` char(255) CHARACTER NOT NULL ,</span><br><span class="line">    `content` text CHARACTER NULL ,</span><br><span class="line">    `time` int(10) NULL DEFAULT NULL ,</span><br><span class="line">    PRIMARY KEY (`id`),</span><br><span class="line">    INDEX index_name (title(length))</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>（4）删除索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DROP INDEX index_name ON table</span><br></pre></td></tr></table></figure>
+
+<h6 id="2-唯一索引"><a href="#2-唯一索引" class="headerlink" title="2.唯一索引"></a>2.唯一索引</h6><p>与前面的普通索引类似，不同的就是：索引列的值必须唯一，但允许有空值。如果是组合索引，则列值的组合必须唯一。它有以下几种创建方式：<br>（1）创建唯一索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE UNIQUE INDEX indexName ON table(column(length))</span><br><span class="line"></span><br><span class="line"># 还有一种情况就是,我们需要为以前的表 创建这个索引,有可能以前的数据中存在重复的记录 那怎么办呢? </span><br><span class="line">alter ignore table tablename add unique index(aa); </span><br><span class="line">#它会删除重复的记录（会保留一条），然后建立唯一索引，高效而且人性化。</span><br></pre></td></tr></table></figure>
+
+<p>（2）修改表结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALTER TABLE table_name ADD UNIQUE indexName ON (column(length))</span><br></pre></td></tr></table></figure>
+
+<p>（3）创建表的时候直接指定</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `table` (</span><br><span class="line">    `id` int(11) NOT NULL AUTO_INCREMENT ,</span><br><span class="line">    `title` char(255) CHARACTER NOT NULL ,</span><br><span class="line">    `content` text CHARACTER NULL ,</span><br><span class="line">    `time` int(10) NULL DEFAULT NULL ,</span><br><span class="line">    UNIQUE indexName (title(length))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h6 id="3-主键索引"><a href="#3-主键索引" class="headerlink" title="3.主键索引"></a>3.主键索引</h6><p>是一种特殊的唯一索引，一个表只能有一个主键，不允许有空值。一般是在建表的时候同时创建主键索引：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `table` (</span><br><span class="line">    `id` int(11) NOT NULL AUTO_INCREMENT ,</span><br><span class="line">    `title` char(255) NOT NULL ,</span><br><span class="line">    PRIMARY KEY (`id`)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>设置字段为主键索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALTER TABLE `table_name` ADD PRIMARY KEY ( `column` );</span><br></pre></td></tr></table></figure>
+
+<h6 id="4-联合索引（复合索引）"><a href="#4-联合索引（复合索引）" class="headerlink" title="4.联合索引（复合索引）"></a>4.联合索引（复合索引）</h6><blockquote>
+<p>​        指多个字段上创建的索引，只有在查询条件中使用了创建索引时的第一个字段，索引才会被使用。使用组合索引时遵循最左前缀集合</p>
+<p>​        两个或更多个列上的索引被称作复合索引。</p>
+<p>​        利用索引中的附加列，您可以缩小搜索的范围，但使用一个具有两列的索引 不同于使用两个单独的索引。复合索引的结构与电话簿类似，人名由姓和名构成，电话簿首先按姓氏对进行排序，然后按名字对有相同姓氏的人进行排序。如果您知 道姓，电话簿将非常有用；如果您知道姓和名，电话簿则更为有用，但如果您只知道名字不知道姓，电话簿将没有任何用处。</p>
+<p>​        所以说创建复合索引时，应该仔细考虑列的顺序。对索引中的所有列执行搜索或仅对前几列执行搜索时，复合索引非常有用；仅对后面的任意列执行搜索时，复合索引则没有用处。 </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALTER TABLE `table` ADD INDEX name_city_age (name,city,age);</span><br></pre></td></tr></table></figure>
+
+<h6 id="5-联合唯一索引（复合唯一索引）"><a href="#5-联合唯一索引（复合唯一索引）" class="headerlink" title="5.联合唯一索引（复合唯一索引）"></a>5.联合唯一索引（复合唯一索引）</h6><blockquote>
+<p> 多列惟一性索引，保证多个值的组合不重复。 </p>
+</blockquote>
+<p>(1) 创建联合唯一索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 语法</span><br><span class="line"># create unique index 索引名字 on 表名(字段1，字段2) </span><br><span class="line">create unique index uni_index on user(phone,address);</span><br><span class="line"></span><br><span class="line"># 还有一种情况就是,我们需要为以前的表 创建这个索引,有可能以前的数据中存在重复的记录 那怎么办呢? </span><br><span class="line">alter ignore table tablename add unique index(aa,bb); </span><br><span class="line">#它会删除重复的记录（会保留一条），然后建立唯一索引，高效而且人性化。</span><br></pre></td></tr></table></figure>
+
+<p>(2) 删除索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop index 索引名字 on 表名;</span><br></pre></td></tr></table></figure>
+
+<h6 id="6-全文索引"><a href="#6-全文索引" class="headerlink" title="6.全文索引"></a>6.全文索引</h6><blockquote>
+<p>主要用来查找文本中的关键字，而不是直接与索引中的值相比较。fulltext索引跟其它索引大不相同，它更像是一个搜索引擎，而不是简单的where语句的参数匹配。fulltext索引配合match against操作使用，而不是一般的where语句加like。它可以在create table，alter table ，create index使用，不过目前只有char、varchar，text 列上可以创建全文索引。值得一提的是，在数据量较大时候，现将数据放入一个没有全局索引的表中，然后再用CREATE index创建fulltext索引，要比先为一张表建立fulltext然后再将数据写入的速度快很多。</p>
+<p> 全文索引（也称全文检索）是目前搜索引擎使用的一种关键技术。它能够利用【分词技术】等多种算法智能分析出文本文字中关键词的频率和重要性，然后按照一定的算法规则智能地筛选出我们想要的搜索结果。 </p>
+<p> 在MySQL 5.6版本以前,只有MyISAM存储引擎支持全文引擎.在5.6版本中,InnoDB加入了对全文索引的支持,但是不支持中文全文索引.在5.7.6版本,MySQL内置了ngram全文解析器,用来支持亚洲语种的分词. </p>
+</blockquote>
+<p>（1）创建表的适合添加全文索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `table` (</span><br><span class="line">    `id` int(11) NOT NULL AUTO_INCREMENT ,</span><br><span class="line">    `title` char(255) CHARACTER NOT NULL ,</span><br><span class="line">    `content` text CHARACTER NULL ,</span><br><span class="line">    `time` int(10) NULL DEFAULT NULL ,</span><br><span class="line">    PRIMARY KEY (`id`),</span><br><span class="line">    FULLTEXT (content)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>（2）修改表结构添加全文索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALTER TABLE article ADD FULLTEXT index_content(content)</span><br></pre></td></tr></table></figure>
+
+<p>（3）直接创建索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE FULLTEXT INDEX index_content ON article(content)</span><br></pre></td></tr></table></figure>
+
+<p>（4）使用全文索引</p>
+<p>​    跟普通索引稍有不同</p>
+<p>   使用全文索引的格式：  MATCH (columnName) AGAINST (‘string’)</p>
+<p>   eg:</p>
+<p>​     </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM `student` WHERE MATCH(`name`) AGAINST(&apos;聪&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>​    当查询多列数据时：</p>
+<p>​    建议在此多列数据上创建一个联合的全文索引，否则使用不了索引的。</p>
+<p>​    </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM `student` WHERE MATCH(`name`,`address`) AGAINST(&apos;聪 广东&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>（5）使用全文索引需要注意的是：(基本单位是词)</p>
+<ul>
+<li><p>分词，全文索引以词为基础的，MySQL默认的分词是所有非字母和数字的特殊符号都是分词符(外国人嘛)</p>
+</li>
+<li><p>MySQL 中的全文索引，有两个变量，最小搜索长度和最大搜索长度，对于长度小于最小搜索长度和大于最大搜索长度的词语，都不会被索引。通俗点就是说，想对一个词语使用全文索引搜索，那么这个词语的长度必须在以上两个变量的区间内。</p>
+<p>这两个的默认值可以使用以下命令查看</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show variables like &apos;%ft%&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>1<br>可以看到这两个变量在 MyISAM 和 InnoDB 两种存储引擎下的变量名和默认值</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// MyISAM</span><br><span class="line">ft_min_word_len = 4;</span><br><span class="line">ft_max_word_len = 84;</span><br><span class="line"></span><br><span class="line">// InnoDB</span><br><span class="line">innodb_ft_min_token_size = 3;</span><br><span class="line">innodb_ft_max_token_size = 84;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到最小搜索长度 MyISAM 引擎下默认是 4，InnoDB 引擎下是 3，也即，MySQL 的全文索引只会对长度大于等于 4 或者 3 的词语建立索引，而刚刚搜索的只有 aaaa 的长度大于等于 4。</p>
+<p>看下图：</p>
+<img src="mysql索引类型及创建索引/全文索引相关变量.png" alt="全文索引配置图片" style="zoom:80%;">
+
+<p>  ​    </p>
+</li>
+</ul>
+<h4 id="四、缺点"><a href="#四、缺点" class="headerlink" title="四、缺点"></a>四、缺点</h4><ol>
+<li><p>虽然索引大大提高了查询速度，同时却会降低更新表的速度，如对表进行insert、update和delete。因为更新表时，不仅要保存数据，还要保存一下索引文件。</p>
+</li>
+<li><p>建立索引会占用磁盘空间的索引文件。一般情况这个问题不太严重，但如果你在一个大表上创建了多种组合索引，索引文件的会增长很快。</p>
+</li>
+</ol>
+<h4 id="五、什么时候需要创建索引"><a href="#五、什么时候需要创建索引" class="headerlink" title="五、什么时候需要创建索引"></a>五、什么时候需要创建索引</h4><ol>
+<li>主键自动建立唯一索引</li>
+<li>频繁作为查询条件的字段应该创建索引</li>
+<li>查询中排序的字段创建索引将大大提高排序的速度（索引就是排序加快速查找）</li>
+<li>查询中统计或者分组的字段；</li>
+</ol>
+<h4 id="六、什么时候不需要创建索引"><a href="#六、什么时候不需要创建索引" class="headerlink" title="六、什么时候不需要创建索引"></a>六、什么时候不需要创建索引</h4><ol>
+<li>频繁更新的字段不适合创建索引，因为每次更新不单单是更新记录，还会更新索引，保存索引文件</li>
+<li>where条件里用不到的字段，不创建索引；</li>
+<li>表记录太少，不需要创建索引；</li>
+<li>经常增删改的表；</li>
+<li>数据重复且分布平均的字段，因此为经常查询的和经常排序的字段建立索引。注意某些数据包含大量重复数据，因此他建立索引就没有太大的效果，例如性别字段，只有男女，不适合建立索引。</li>
+</ol>
+<h4 id="七，注意事项-某些索引失效的情况"><a href="#七，注意事项-某些索引失效的情况" class="headerlink" title="七，注意事项(某些索引失效的情况)"></a>七，注意事项(某些索引失效的情况)</h4><blockquote>
+<p>​        使用索引时，有以下一些技巧和注意事项：</p>
+</blockquote>
+<ol>
+<li><strong>索引不会包含有null值的列</strong>。<br>只要列中包含有null值都将不会被包含在索引中，复合索引中只要有一列含有null值，那么这一列对于此复合索引就是无效的。所以我们在数据库设计时不要让字段的默认值为null。</li>
+</ol>
+<ol start="2">
+<li><strong>使用短索引。</strong><br>对串列进行索引，如果可能应该指定一个前缀长度。例如，如果有一个char(255)的列，如果在前10个或20个字符内，多数值是惟一的，那么就不要对整个列进行索引。短索引不仅可以提高查询速度而且可以节省磁盘空间和I/O操作。</li>
+</ol>
+<ol start="3">
+<li><strong>索引列排序</strong>。<br>查询只使用一个索引，因此如果where子句中已经使用了索引的话，那么order by中的列是不会使用索引的。因此数据库默认排序可以符合要求的情况下不要使用排序操作；尽量不要包含多个列的排序，如果需要最好给这些列创建复合索引。</li>
+</ol>
+<ol start="4">
+<li><p><strong>like语句操作。</strong><br>一般情况下不推荐使用like操作，如果非使用不可，如何使用也是一个问题。like “%aaa%” 不会使用索引而like “aaa%”可以使用索引。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用索引</span><br><span class="line">select * from user where phone like&apos;1310001%&apos;</span><br><span class="line"></span><br><span class="line"># 将不会使用索引</span><br><span class="line">select * from user where phone like&apos;%310001%&apos;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="5">
+<li><p><strong>不要在列上进行运算</strong>。</p>
+<blockquote>
+<p>目前，MySQL没有支持函数索引。 这意味着如果在列上使用索引，表达式YEAR(column)也不会</p>
+<p>利用索引。等于说是给字段进行运算会导致索引失效</p>
+</blockquote>
+</li>
+</ol>
+<p>   这将导致索引失效而进行全表扫描，例如</p>
+<p>   SELECT * FROM table_name WHERE YEAR(column_name)&lt;2019;</p>
+<p>   可以改成：</p>
+<pre><code>SELECT * FROM table_name WHERE  column_name &lt; &apos;2019-01-01&apos;;</code></pre><ol start="6">
+<li><strong>如果条件中有or，即使其中有条件带索引也不会使用索引 ， 要想使用or，又想让索引生效，只能将or条件中的每个列都加上索引</strong>。 </li>
+</ol>
+<ol start="7">
+<li><p><strong>对于多列索引，不是使用的第一部分（最左前缀），则不会使用索引。 Mysql从左到右的使用索引中的字段，一个查询可以只使用索引中的一部份，但只能是最左侧部分。</strong></p>
+<p>例如索引是key index (a,b,c). 可以支持*<em>a| *</em>a,b| a,b,c,  3种组合进行查找，但不支持 b,c进行查找 .当最左侧字段是常量引用时，索引就十分有效。</p>
+</li>
+</ol>
+<ol start="8">
+<li><strong>如果 mysql 估计使用全表扫描要比使用索引快,则不使用索引。</strong> </li>
+</ol>
+<ol start="9">
+<li><strong>在一个SELECT语句中，索引只能使用一次，如果在WHERE中使用了，那么在ORDER BY中就不要用了。</strong></li>
+</ol>
+<ol start="10">
+<li><strong>如果排序的字段使用了索引，那么select的字段也要是索引字段，否则索引失效。特别的是如果排序的是主键索引则select * 也不会导致索引失效。</strong></li>
+</ol>
+<ol start="11">
+<li><p><strong>强制类型转换会全表扫描，</strong></p>
+<p>如果phone字段是varcher类型，则下面的SQL不能命中索引。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Select  *  fromuser where phone=13800001234;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以命中索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Select  *  fromuser where phone=&apos;13800001234&apos;;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h4 id="八，查看sql语句执行时间和效率"><a href="#八，查看sql语句执行时间和效率" class="headerlink" title="八，查看sql语句执行时间和效率"></a>八，查看sql语句执行时间和效率</h4><h5 id="查看执行时间"><a href="#查看执行时间" class="headerlink" title="查看执行时间"></a>查看执行时间</h5><ol>
+<li>show profiles; </li>
+<li>show variables;查看profiling 是否是on状态； </li>
+<li>如果是off，则 set profiling = 1； </li>
+<li>执行自己的sql语句； </li>
+<li>show profiles；就可以查到sql语句的执行时间；</li>
+</ol>
+<h5 id="查看操作了多少行"><a href="#查看操作了多少行" class="headerlink" title="查看操作了多少行"></a>查看操作了多少行</h5><p>在sql语句前面加上 explain就可以了；</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">explain select * from event;  </span><br><span class="line">+—-+————-+——-+——+—————+——+———+——+——+——-+  </span><br><span class="line">| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |  </span><br><span class="line">+—-+————-+——-+——+—————+——+———+——+——+——-+  </span><br><span class="line">| 1 | SIMPLE | event | ALL | NULL | NULL | NULL | NULL | 13 | |  </span><br><span class="line">+—-+————-+——-+——+—————+——+———+——+——+——-+  </span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h5 id="各个属性的含义"><a href="#各个属性的含义" class="headerlink" title="各个属性的含义"></a>各个属性的含义</h5><p>各个属性的含义</p>
+<p><strong>id</strong></p>
+<ul>
+<li>​    select查询的序列号， 这个不重要,查询序号即为sql语句执行的顺序 。</li>
+</ul>
+<p><strong>select_type</strong></p>
+<ul>
+<li>​    select查询的类型，主要是区别普通查询和联合查询、子查询之类的复杂查询。</li>
+</ul>
+<p><strong>table</strong></p>
+<ul>
+<li>​    输出的行所引用的表。</li>
+</ul>
+<p><strong>type</strong></p>
+<ul>
+<li>​    联合查询所使用的类型。</li>
+</ul>
+<ul>
+<li>​    type显示的是访问类型，是较为重要的一个指标，结果值从好到坏依次是：</li>
+</ul>
+<ul>
+<li><p>​    system &gt; const &gt; eq_ref &gt; ref &gt; fulltext &gt; ref_or_null &gt; index_merge &gt; unique_subquery &gt;       index_subquery &gt; range &gt; index &gt; ALL</p>
+<p>​    一般来说，得保证查询至少达到range级别，最好能达到ref。</p>
+</li>
+</ul>
+<p><strong>possible_keys</strong></p>
+<ul>
+<li>​    指出MySQL能使用哪个索引在该表中找到行。如果是空的，没有相关的索引。这时要提高性     能，可    通过检验WHERE子句，看是否引用某些字段，或者检查字段不是适合索引。</li>
+</ul>
+<p><strong>key</strong></p>
+<ul>
+<li>​    显示MySQL实际决定使用的键。如果没有索引被选择，键是NULL。</li>
+</ul>
+<p><strong>key_len</strong></p>
+<ul>
+<li>​    显示MySQL决定使用的键长度。如果键是NULL，长度就是NULL。文档提示特别注意这个值可以得    出一个多重主键里mysql实际使用了哪一部分。</li>
+</ul>
+<p><strong>ref</strong></p>
+<ul>
+<li>​    显示哪个字段或常数与key一起被使用。</li>
+</ul>
+<p><strong>rows</strong></p>
+<ul>
+<li>​    这个数表示mysql要遍历多少数据才能找到，在innodb上是不准确的。</li>
+</ul>
+<p><strong>Extra</strong></p>
+<ul>
+<li>​    如果是Only index，这意味着信息只用索引树中的信息检索出的，这比扫描整个表要快。</li>
+</ul>
+<ul>
+<li>​    如果是where used，就是使用上了where限制。</li>
+</ul>
+<ul>
+<li>​    如果是impossible where 表示用不着where，一般就是没查出来啥。</li>
+</ul>
+<p>参考链接：</p>
+<p>​        <a href="https://blog.csdn.net/u014518337/article/details/88179607" target="_blank" rel="noopener">https://blog.csdn.net/u014518337/article/details/88179607</a></p>
+<p>​        <a href="https://www.jb51.net/article/158141.htm" target="_blank" rel="noopener">https://www.jb51.net/article/158141.htm</a> </p>
+<p>​        <a href="https://blog.csdn.net/qq_33451004/article/details/68976090" target="_blank" rel="noopener">https://blog.csdn.net/qq_33451004/article/details/68976090</a></p>
+<p>​         <a href="https://www.cnblogs.com/luohero/p/9139985.html" target="_blank" rel="noopener">https://www.cnblogs.com/luohero/p/9139985.html</a> </p>
+<p>​         <a href="https://www.cnblogs.com/l199616j/p/11232392.html" target="_blank" rel="noopener">https://www.cnblogs.com/l199616j/p/11232392.html</a> </p>
+]]></content>
+      <categories>
+        <category>mysql</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
