@@ -81,7 +81,7 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2020/01/09/mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
+    <url>/2020/01/09/mysql%E5%BF%98%E8%AE%B0%E5%AF%86%E7%A0%81/</url>
     <content><![CDATA[<p>title: Mysql主从复制<br>date: 2019-09-09<br>tags: mysql<br>categories: mysql</p><a id="more"></a>
 <h1 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. 关闭正在运行的MySQL服务</span><br><span class="line">2. 打开DOS窗口，转到mysql\bin目录</span><br><span class="line">3. 输入mysqld --skip-grant-tables 回车       --skip-grant-tables 的意思是启动MySQL服务的时候跳过权限表认证</span><br><span class="line">4. 再开一个DOS窗口（因为刚才那个DOS窗口已经不能动了），转到mysql\bin目录 </span><br><span class="line">5. 输入mysql回车，如果成功，将出现MySQL提示符 &gt;</span><br><span class="line">6. 连接权限数据库： use mysql;</span><br><span class="line">6. 改密码：update user set password=password(&quot;root&quot;) where user=&quot;root&quot;; </span><br><span class="line">   mysql5.7以上版本--&gt;    UPDATE user SET authentication_string=PASSWORD(&quot;root&quot;) WHERE User=&quot;root&quot;;</span><br><span class="line">7. 刷新权限（必须步骤）：flush privileges;　</span><br><span class="line">8. 退出 quit。 </span><br><span class="line">9. 注销系统，再进入，使用用户名root和刚才设置的新密码123登录。</span><br></pre></td></tr></table></figure>
 
