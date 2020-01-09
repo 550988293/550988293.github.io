@@ -77,7 +77,7 @@ Redisearch 是一个高效，功能完备的内存存储的高性能全文检索
       </tags>
   </entry>
   <entry>
-    <title>Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口</title>
+    <title>Python3.7.2+Django2.0.4 商城集成最新版支付宝支付接口</title>
     <url>/2019/07/02/Python3.7.2+Django2.0.4%20%E5%95%86%E5%9F%8E%E9%9B%86%E6%88%90%E6%9C%80%E6%96%B0%E7%89%88%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3/</url>
     <content><![CDATA[<p>  最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍</p><a id="more"></a>
 <p>  在Mac系统下生成新版支付宝（2019年4月）支付接口私钥和公钥</p>
@@ -85,7 +85,7 @@ Redisearch 是一个高效，功能完备的内存存储的高性能全文检索
 <p>  pip3 install -i <a href="https://pypi.douban.com/simple" target="_blank" rel="noopener">https://pypi.douban.com/simple</a> pycryptodome</p>
 <p>  然后将之前生成好的私钥和公钥（注意这里的公钥是指支付宝公钥），放入到项目目录中去</p>
 <p>  </p>
-<p>  <br>  <br>  文档地址：<a href="https://docs.open.alipay.com/api" target="_blank" rel="noopener">https://docs.open.alipay.com/api</a></p>
+<p>  <br>  文档地址：<a href="https://docs.open.alipay.com/api" target="_blank" rel="noopener">https://docs.open.alipay.com/api</a></p>
 <p>  然后根据支付宝官网文档写一个支付基类 pay.py</p>
 <p>from datetime import datetime<br>from Crypto.PublicKey import RSA<br>from Crypto.Signature import PKCS1_v1_5<br>from Crypto.Hash import SHA256<br>from urllib.parse import quote_plus<br>from urllib.parse import urlparse, parse_qs<br>from base64 import decodebytes, encodebytes<br>import json</p>
 <p>class AliPay(object):<br>    “””<br>    支付宝支付接口(PC端支付接口)<br>    “””</p>
