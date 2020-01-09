@@ -78,7 +78,7 @@ Redisearch 是一个高效，功能完备的内存存储的高性能全文检索
   </entry>
   <entry>
     <title>Python3.7.2+Django2.0.4 美多商城集成最新版支付宝支付接口</title>
-    <url>/2019/07/02/Python3.7.2+Django2.0.4%20%E7%BE%8E%E5%A4%9A%E5%95%86%E5%9F%8E%E9%9B%86%E6%88%90%E6%9C%80%E6%96%B0%E7%89%88%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3/</url>
+    <url>/2019/07/02/Python3.7.2+Django2.0.4%20%E5%95%86%E5%9F%8E%E9%9B%86%E6%88%90%E6%9C%80%E6%96%B0%E7%89%88%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3/</url>
     <content><![CDATA[<p>  最新版支付宝算法的改变就是RSA升级了RSA2,长度推荐2048,其他的逻辑变化不大，关于秘钥的生成在之前的一篇文章已经有所介绍</p><a id="more"></a>
 <p>  在Mac系统下生成新版支付宝（2019年4月）支付接口私钥和公钥</p>
 <p>  在Django中集成支付接口的前置操作就是需要安装pycryptodome</p>
